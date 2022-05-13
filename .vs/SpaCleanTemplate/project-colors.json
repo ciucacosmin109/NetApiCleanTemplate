@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "b19d5a88-8a56-4a76-8c03-253407b1c39d": {
+      "ProjectGuid": "b19d5a88-8a56-4a76-8c03-253407b1c39d",
+      "DisplayName": "SpaCleanTemplate.Web",
+      "ColorIndex": 0
+    },
+    "8fba67b6-c352-4e82-8ef1-0638b2d216f6": {
+      "ProjectGuid": "8fba67b6-c352-4e82-8ef1-0638b2d216f6",
+      "DisplayName": "SpaCleanTemplate.Core",
+      "ColorIndex": 1
+    },
+    "d838b854-c3cc-4523-ac0f-136d2199ade2": {
+      "ProjectGuid": "d838b854-c3cc-4523-ac0f-136d2199ade2",
+      "DisplayName": "SpaCleanTemplate.Infrastructure",
+      "ColorIndex": 2
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    },
+    "99ce6834-6889-4fa1-8bf8-4e03522da9db": {
+      "ProjectGuid": "99ce6834-6889-4fa1-8bf8-4e03522da9db",
+      "DisplayName": "SpaCleanTemplate.UnitTests",
+      "ColorIndex": 3
+    },
+    "d5375960-1461-403f-b30f-e851ce136f36": {
+      "ProjectGuid": "d5375960-1461-403f-b30f-e851ce136f36",
+      "DisplayName": "SpaCleanTemplate.IntegrationTests",
+      "ColorIndex": 4
+    },
+    "eaf32170-61df-49ce-92fb-034790e44e33": {
+      "ProjectGuid": "eaf32170-61df-49ce-92fb-034790e44e33",
+      "DisplayName": "SpaCleanTemplate.FunctionalTests",
+      "ColorIndex": 5
+    }
+  },
+  "NextColorIndex": 6
+}
