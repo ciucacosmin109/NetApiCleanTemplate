@@ -7,6 +7,6 @@ using SpaCleanTemplate.Core.Exceptions;
 
 namespace SpaCleanTemplate.Core.Entities.DemoEntity.Exceptions;
 
-internal class InvalidDemoStringException : DomainException
+public class InvalidDemoStringException : DomainException
 {
 }

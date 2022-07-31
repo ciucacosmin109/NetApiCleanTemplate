@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "TInAgQK4KzcfSN+ZT1auL/+aItfwLajI61irXLqGr9+jm4E335nc2roc3gLN+MtkHQkoQpNfI3VUx1n3CfTgjw==",
+  "dgSpecHash": "fybmvGeg+f9xutzilL0birwddZyb7U9U7rmrTmGNQQmqkAgr7QEJMltXcpDQhFfhFtyiWTiFCHjP4Ks6oE9SfA==",
   "success": true,
   "projectFilePath": "D:\\2_Development\\Web\\SpaCleanTemplate\\tests\\SpaCleanTemplate.UnitTests\\SpaCleanTemplate.UnitTests.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Cosmin\\.nuget\\packages\\coverlet.collector\\3.1.0\\coverlet.collector.3.1.0.nupkg.sha512",
+    "C:\\Users\\Cosmin\\.nuget\\packages\\coverlet.collector\\3.1.2\\coverlet.collector.3.1.2.nupkg.sha512",
     "C:\\Users\\Cosmin\\.nuget\\packages\\microsoft.codecoverage\\16.11.0\\microsoft.codecoverage.16.11.0.nupkg.sha512",
     "C:\\Users\\Cosmin\\.nuget\\packages\\microsoft.csharp\\4.0.1\\microsoft.csharp.4.0.1.nupkg.sha512",
     "C:\\Users\\Cosmin\\.nuget\\packages\\microsoft.net.test.sdk\\16.11.0\\microsoft.net.test.sdk.16.11.0.nupkg.sha512",

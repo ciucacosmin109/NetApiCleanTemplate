@@ -11,4 +11,9 @@ namespace SpaCleanTemplate.Core.Entities;
 public abstract class BaseEntity
 {
     public virtual int Id { get; protected set; }
+
+    public BaseEntity(int id)
+    {
+        Id = id;
+    }
 }

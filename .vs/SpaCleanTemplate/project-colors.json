@@ -3,7 +3,7 @@
   "ProjectMap": {
     "b19d5a88-8a56-4a76-8c03-253407b1c39d": {
       "ProjectGuid": "b19d5a88-8a56-4a76-8c03-253407b1c39d",
-      "DisplayName": "SpaCleanTemplate.Web",
+      "DisplayName": "SpaCleanTemplate.WebApi",
       "ColorIndex": 0
     },
     "8fba67b6-c352-4e82-8ef1-0638b2d216f6": {
@@ -35,7 +35,22 @@
       "ProjectGuid": "eaf32170-61df-49ce-92fb-034790e44e33",
       "DisplayName": "SpaCleanTemplate.FunctionalTests",
       "ColorIndex": 5
+    },
+    "2f778f41-f70e-4679-8eb2-4afcb2e535f8": {
+      "ProjectGuid": "2f778f41-f70e-4679-8eb2-4afcb2e535f8",
+      "DisplayName": "src",
+      "ColorIndex": 6
+    },
+    "6c6a9a96-fcda-41ea-b1e4-5e3c010959b5": {
+      "ProjectGuid": "6c6a9a96-fcda-41ea-b1e4-5e3c010959b5",
+      "DisplayName": "Solution Items",
+      "ColorIndex": 7
+    },
+    "f81145da-f11f-4108-a1f8-7b836245ab20": {
+      "ProjectGuid": "f81145da-f11f-4108-a1f8-7b836245ab20",
+      "DisplayName": "Solution Items",
+      "ColorIndex": 8
     }
   },
-  "NextColorIndex": 6
+  "NextColorIndex": 9
 }

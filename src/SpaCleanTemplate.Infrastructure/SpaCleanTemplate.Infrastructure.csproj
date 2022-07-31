@@ -6,4 +6,23 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Identity\Config\" />
+    <Folder Include="Identity\Managers\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Data\Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SpaCleanTemplate.Core\SpaCleanTemplate.Core.csproj" />
+  </ItemGroup>
+
 </Project>
