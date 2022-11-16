@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NetApiCleanTemplate.Core.Entities.DemoEntity.Constants;
 using NetApiCleanTemplate.Core.Entities.DemoEntity.Exceptions;
-using NetApiCleanTemplate.Core.Guards;
+using NetApiCleanTemplate.SharedKernel.Guards;
 
 namespace NetApiCleanTemplate.Core.Entities.DemoEntity.Guards;
 

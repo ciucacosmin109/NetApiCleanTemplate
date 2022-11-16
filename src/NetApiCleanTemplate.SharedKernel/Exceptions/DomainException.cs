@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetApiCleanTemplate.Core.Exceptions;
+namespace NetApiCleanTemplate.SharedKernel.Exceptions;
 
 public class DomainException : Exception
 {

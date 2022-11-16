@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NetApiCleanTemplate.Core.Interfaces.Entities;
+using NetApiCleanTemplate.SharedKernel.Entities.Interfaces;
 
-namespace NetApiCleanTemplate.Core.Entities;
+namespace NetApiCleanTemplate.SharedKernel.Entities;
 
 public abstract class AuditedEntity<T> : BaseEntity<T>, IAudited<T>
 {

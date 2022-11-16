@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetApiCleanTemplate.Core.Guards;
+namespace NetApiCleanTemplate.SharedKernel.Guards;
 
 /// <summary>
 /// Simple interface to provide a generic mechanism to build guard clause extension methods from.

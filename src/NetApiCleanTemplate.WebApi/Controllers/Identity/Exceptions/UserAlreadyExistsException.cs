@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NetApiCleanTemplate.Core.Exceptions;
+using NetApiCleanTemplate.SharedKernel.Exceptions;
 
 namespace NetApiCleanTemplate.WebApi.Controllers.Identity.Exceptions;
 

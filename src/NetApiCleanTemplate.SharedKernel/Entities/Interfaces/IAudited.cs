@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetApiCleanTemplate.Core.Interfaces.Entities;
+namespace NetApiCleanTemplate.SharedKernel.Entities.Interfaces;
 public interface IAudited<T> : ICreationAudited<T>, IModificationAudited<T>
 {
 }

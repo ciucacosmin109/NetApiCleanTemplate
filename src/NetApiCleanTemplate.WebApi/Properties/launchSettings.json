@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "NetApiCleanTemplate.Web": {
+    "NetApiCleanTemplate.WebApi": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

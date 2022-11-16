@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace NetApiCleanTemplate.Core.Extensions;
+namespace NetApiCleanTemplate.SharedKernel.Extensions;
 
 public static class JsonExtensions
 {

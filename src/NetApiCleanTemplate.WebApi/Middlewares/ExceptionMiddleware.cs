@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using NetApiCleanTemplate.Core.Exceptions;
+using NetApiCleanTemplate.SharedKernel.Exceptions;
 using NetApiCleanTemplate.WebApi.Models;
 
 namespace NetApiCleanTemplate.WebApi.Middlewares;
@@ -29,12 +29,12 @@ public class ExceptionMiddleware
     {
         context.Response.ContentType = "application/json";
 
-        if (exception is DuplicateException duplicationException)
+        if (exception is DomainException domainException)
         {
-            context.Response.StatusCode = (int)HttpStatusCode.Conflict;
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             await context.Response.WriteAsync(new ErrorDetails() {
                 StatusCode = context.Response.StatusCode,
-                Message = duplicationException.Message
+                Message = domainException.Message
             }.ToString());
         }
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NetApiCleanTemplate.Core.Exceptions;
+using NetApiCleanTemplate.SharedKernel.Exceptions;
 
 namespace NetApiCleanTemplate.Web.Controllers.Demo;
 
@@ -25,11 +25,11 @@ public class DemoController : ControllerBase
         };
     }
 
-    [HttpGet("TestDuplicateException")]
-    public void TestDuplicateException()
+    [HttpGet("TestDomainException")]
+    public void TestDomainException()
     {
         _logger.LogInformation("TestDuplicateException");
-        throw new DuplicateException("Oh, it's a duplicate :(");
+        throw new DomainException("Oh, it's a duplicate :(");
     }
 
     [HttpGet("TestAuthentication")]

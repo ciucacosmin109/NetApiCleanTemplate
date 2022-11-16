@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetApiCleanTemplate.Core.Interfaces;
+namespace NetApiCleanTemplate.SharedKernel.Interfaces;
 
 /// <summary>
 /// This type eliminates the need to depend directly on the ASP.NET Core logging types.

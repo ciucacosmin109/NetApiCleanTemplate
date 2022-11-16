@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetApiCleanTemplate.Core.Entities.DemoEntity.Constants;
-using NetApiCleanTemplate.Core.Exceptions;
+using NetApiCleanTemplate.SharedKernel.Exceptions;
 
 namespace NetApiCleanTemplate.Core.Entities.DemoEntity.Exceptions;
 

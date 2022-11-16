@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetApiCleanTemplate.Core.Interfaces.Entities;
-public interface ISoftDeletable
+namespace NetApiCleanTemplate.SharedKernel.Interfaces;
+
+public interface IRepository
 {
-    bool IsDeleted { get; set; }
 }
 
