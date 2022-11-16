@@ -3,8 +3,8 @@ $oldCompanyName="YourCompanyName"
 $newCompanyName="YourCompanyName"
 
 # Project name
-$oldProjectName="SpaNetCoreCleanTemplate" 
-$newProjectName="SpaNetCoreCleanTemplate"
+$oldProjectName="NetApiCleanTemplate" 
+$newProjectName="NetApiCleanTemplate"
  
 # folders to deal with
 $targetFolder = (Get-Item -Path "." -Verbose).FullName 
@@ -63,7 +63,6 @@ function Rename {
 	Write-Host ''
 }
 Rename -TargetFolder $targetFolder -PlaceHolderCompanyName $oldCompanyName -PlaceHolderProjectName $oldProjectName -NewCompanyName $newCompanyName -NewProjectName $newProjectName
-
 
 
 

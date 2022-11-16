@@ -1,3 +1,7 @@
+# SpaCleanTemplate
+
+## Resources
+
 https://www.youtube.com/watch?v=vRZ8ucGac8M
 
 
@@ -11,7 +15,9 @@ https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/intro?view=aspnetcore-6
 
 
 
-
+## Add Migration
+dotnet ef migrations add InitialMigration --context AppDbContext --output-dir Data/Migrations --project ../SpaCleanTemplate.Infrastructure
+dotnet ef migrations add InitialMigration --context AppIdentityDbContext --output-dir Identity/Migrations --project ../SpaCleanTemplate.Infrastructure
 
 
 
