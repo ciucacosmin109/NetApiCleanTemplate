@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NetApiCleanTemplate.Core.Entities.DemoEntity.Guards;
 using NetApiCleanTemplate.SharedKernel.Exceptions;
+using NetApiCleanTemplate.SharedKernel.Guards;
 
 namespace NetApiCleanTemplate.Web.Controllers.Demo;
 
@@ -30,6 +32,15 @@ public class DemoController : ControllerBase
     {
         _logger.LogInformation("TestDuplicateException");
         throw new DomainException("Oh, it's a duplicate :(");
+    }
+
+    [HttpGet("TestGuardClause")]
+    public string TestGuardClause(string demoString)
+    {
+        _logger.LogInformation("TestGuardClause");
+        Guard.Against.InvalidDemoString(demoString);
+        
+        return demoString;
     }
 
     [HttpGet("TestAuthentication")]

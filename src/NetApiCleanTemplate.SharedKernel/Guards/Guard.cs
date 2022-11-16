@@ -10,17 +10,13 @@ namespace NetApiCleanTemplate.SharedKernel.Guards;
 /// Simple interface to provide a generic mechanism to build guard clause extension methods from.
 /// </summary>
 public interface IGuardClause { }
+internal class GuardClause : IGuardClause { }
 
 /// <summary>
-/// An entry point to a set of Guard Clauses defined as extension methods on IGuardClause.
+/// An entry point (Guard.Against) to a set of Guard Clauses defined as extension methods on IGuardClause.
 /// </summary>
 /// <remarks>See http://www.weeklydevtips.com/004 on Guard Clauses</remarks>
-public class Guard : IGuardClause
+public class Guard
 {
-    /// <summary>
-    /// An entry point to a set of Guard Clauses.
-    /// </summary>
-    public static IGuardClause Against { get; } = new Guard();
-
-    private Guard() { }
+    public static IGuardClause Against { get; } = new GuardClause();
 }
