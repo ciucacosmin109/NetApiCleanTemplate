@@ -1,14 +1,12 @@
 ﻿# Company name
 $oldCompanyName="YourCompanyName"
-$newCompanyName="YourCompanyName"
+$newCompanyName="Cmc"
 
 # Project name
 $oldProjectName="NetApiCleanTemplate" 
-$newProjectName="NetApiCleanTemplate"
- 
-# folders to deal with
-$targetFolder = (Get-Item -Path "." -Verbose).FullName 
+$newProjectName="Disertation"
 
+# Rename function
 function Rename {
 	param (
 		$TargetFolder,
@@ -24,7 +22,6 @@ function Rename {
 
 	$elapsed = [System.Diagnostics.Stopwatch]::StartNew()
 
-	Write-Host ''
 	Write-Host '----------------------------------------------------------------------------------'
 	Write-Host "[$TargetFolder] Renaming folders ..."
 	Write-Host '----------------------------------------------------------------------------------'
@@ -62,19 +59,27 @@ function Rename {
 	Write-Host '----------------------------------------------------------------------------------'
 	Write-Host ''
 }
+
+Write-Host ''
+
+# Copy
+$newRoot = $newCompanyName + "." + $newProjectName
+
+Write-Host '----------------------------------------------------------------------------------'
+Write-Host " Copying files to $newRoot ..."
+Write-Host '----------------------------------------------------------------------------------'
+Write-Host ''
+
+$source = ".\*"
+$destination = "..\\" + $newRoot
+
+Remove-Item -Recurse $destination
+mkdir $destination
+Copy-Item -Path (Get-Item -Path $source -Exclude ('.git', '.vs', 'x-create-project.ps1')).FullName -Destination $destination -Recurse -Force
+
+# Rename
+$targetFolder = (Get-Item -Path "..\$newRoot\" -Verbose).FullName
 Rename -TargetFolder $targetFolder -PlaceHolderCompanyName $oldCompanyName -PlaceHolderProjectName $oldProjectName -NewCompanyName $newCompanyName -NewProjectName $newProjectName
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
