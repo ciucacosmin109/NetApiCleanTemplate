@@ -7,10 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Identity\Config\" />
-    <Folder Include="Identity\Managers\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Data\Repositories\" />
+    <Compile Remove="Identity\Config\**" />
+    <Compile Remove="Identity\Managers\**" />
+    <EmbeddedResource Remove="Identity\Config\**" />
+    <EmbeddedResource Remove="Identity\Managers\**" />
+    <None Remove="Identity\Config\**" />
+    <None Remove="Identity\Managers\**" />
   </ItemGroup>
 
   <ItemGroup>

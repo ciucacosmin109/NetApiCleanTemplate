@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NetApiCleanTemplate.Core.Interfaces;
+using Microsoft.Extensions.Options;
+using NetApiCleanTemplate.Core.Entities.DemoEntity;
+using NetApiCleanTemplate.Core.General.Interfaces;
 using NetApiCleanTemplate.Infrastructure.Data;
 using NetApiCleanTemplate.Infrastructure.Identity;
+using NetApiCleanTemplate.Infrastructure.Uow;
+using NetApiCleanTemplate.SharedKernel.Interfaces;
+using NetApiCleanTemplate.SharedKernel.Interfaces.Uow;
 
 namespace NetApiCleanTemplate.Infrastructure;
 
@@ -19,31 +24,32 @@ public static class Dependencies
         // Databases
         if (UseOnlyInMemoryDatabase(configuration))
         {
-            services.AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase("NetApiCleanTemplate.Database")); 
-            services.AddDbContext<AppIdentityDbContext>(o => o.UseInMemoryDatabase("NetApiCleanTemplate.Identity"));
+            // Use an in-memory database
+            services.AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase("NetApiCleanTemplate.Database"));
+            services.AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase("NetApiCleanTemplate.Identity"));
         }
         else
         {
-            // use real databases
-            // Requires LocalDB which can be installed with SQL Server Express 2016
+            // Use real databases
+            // Requires LocalDB which can be installed with SQL Server Express
             // https://www.microsoft.com/en-us/download/details.aspx?id=54284
 
             // Add App DbContext
-            services.AddDbContext<AppDbContext>(c =>
-                c.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
-            );
-
-            // Add Identity DbContext
-            services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("IdentityConnection"))
-            );
+            services.AddDbContext<AppDbContext>(options => {
+                AppDbContextConfigurator.Configure(options, configuration);
+            });
+            services.AddDbContext<AppIdentityDbContext>(options => {
+                AppIdentityDbContextConfigurator.Configure(options, configuration);
+            });
         }
 
         // Others
         services.AddMemoryCache();
+        services.AddScoped<IUnitOfWorkManager, TransactionalUnitOfWorkManager>();
 
         // TO DO: Replace with an automatic method
         services.AddTransient<ITokenClaimsService, IdentityTokenClaimService>();
+        services.AddTransient<IRepository<DemoEntity, int>, Data.Repositories.Repository<DemoEntity, int>>();
     }
 
     private static bool UseOnlyInMemoryDatabase(IConfiguration configuration)

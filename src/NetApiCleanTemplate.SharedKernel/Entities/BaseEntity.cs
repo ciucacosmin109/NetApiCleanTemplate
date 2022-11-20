@@ -9,15 +9,7 @@ namespace NetApiCleanTemplate.SharedKernel.Entities;
 
 public abstract class BaseEntity<T> : IBaseEntity<T>
 {
-    public T Id { get; set; } 
-
-    public BaseEntity(T id)
-    {
-        Id = id;
-    }
+    public T Id { get; set; } = default!;
 }
 
-public abstract class BaseEntity : BaseEntity<int>
-{
-    public BaseEntity(int id) : base(id) { }
-}
+public abstract class BaseEntity : BaseEntity<int> { }

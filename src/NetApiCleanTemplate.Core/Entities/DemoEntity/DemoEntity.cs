@@ -9,17 +9,11 @@ namespace NetApiCleanTemplate.Core.Entities.DemoEntity;
 
 public class DemoEntity : BaseEntity
 {
-    public string DemoString { get; set; }
+    public string DemoString { get; set; } = String.Empty;
 
     public int? DemoParentId { get; set; }
     public DemoEntity? DemoParent { get; set; }
 
-    public ICollection<DemoEntity> DemoChildren { get; set; }
-
-    public DemoEntity(int id, string demoString) : base(id)
-    {
-        DemoString = demoString;
-        DemoChildren = new List<DemoEntity>();
-    }
+    public ICollection<DemoEntity> DemoChildren { get; set; } = new List<DemoEntity>();
 }
 

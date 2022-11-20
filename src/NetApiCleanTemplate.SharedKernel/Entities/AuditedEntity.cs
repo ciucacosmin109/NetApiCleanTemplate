@@ -14,11 +14,6 @@ public abstract class AuditedEntity<T> : BaseEntity<T>, IAudited<T>
 
     public T? LastModifierUserId { get; set; }
     public DateTime? LastModificationTime { get; set; }
-
-    public AuditedEntity(T id) : base(id) { }
 }
 
-public abstract class AuditedEntity : AuditedEntity<int>
-{
-    public AuditedEntity(int id) : base(id) { }
-}
+public abstract class AuditedEntity : AuditedEntity<int> { }

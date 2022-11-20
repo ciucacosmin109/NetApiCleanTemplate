@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity; 
 using Microsoft.IdentityModel.Tokens;
 using NetApiCleanTemplate.Core.Constants;
-using NetApiCleanTemplate.Core.Interfaces;
+using NetApiCleanTemplate.Core.General.Interfaces;
 
 namespace NetApiCleanTemplate.Infrastructure.Identity;
 

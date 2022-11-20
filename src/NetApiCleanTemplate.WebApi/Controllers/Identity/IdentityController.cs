@@ -3,7 +3,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using NetApiCleanTemplate.Core.Interfaces;
+using NetApiCleanTemplate.Core.General.Interfaces;
 using NetApiCleanTemplate.WebApi.Controllers.Identity.Exceptions;
 using NetApiCleanTemplate.WebApi.Controllers.Identity.Models;
 using Swashbuckle.AspNetCore.Annotations;
