@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Migrations.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
+using NetApiCleanTemplate.SharedKernel.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -30,18 +31,17 @@ public class TransactionWrappedMigrator : Migrator
         IDiagnosticsLogger<DbLoggerCategory.Migrations> logger,
         IRelationalCommandDiagnosticsLogger commandLogger,
         IDatabaseProvider databaseProvider
-    )
-        : base(
-                migrationsAssembly, historyRepository, databaseCreator, migrationsSqlGenerator, 
-                rawSqlCommandBuilder, migrationCommandExecutor, connection, sqlGenerationHelper, 
-                currentContext, modelRuntimeInitializer, logger, commandLogger, databaseProvider
-        )
-    {
+    ) : base(
+        migrationsAssembly, historyRepository, databaseCreator, migrationsSqlGenerator, 
+        rawSqlCommandBuilder, migrationCommandExecutor, connection, sqlGenerationHelper, 
+        currentContext, modelRuntimeInitializer, logger, commandLogger, databaseProvider
+    ) {
     }
 
-    private void PrintOptions(String fromMigration = null, String toMigration = null, MigrationsSqlGenerationOptions options = MigrationsSqlGenerationOptions.Default)
+    private static void PrintOptions(string? fromMigration = null, string? toMigration = null, MigrationsSqlGenerationOptions options = MigrationsSqlGenerationOptions.Default)
     {
         Console.WriteLine(
+            $"{Environment.NewLine}" +
             $"From migration: {fromMigration ?? "N\\A"} {Environment.NewLine}" +
             $"To migration: {toMigration ?? "N\\A"} {Environment.NewLine}" +
             $"Options: {Environment.NewLine}" +
@@ -52,7 +52,7 @@ public class TransactionWrappedMigrator : Migrator
         );
     }
 
-    public override String GenerateScript(String fromMigration = null, String toMigration = null, MigrationsSqlGenerationOptions options = MigrationsSqlGenerationOptions.Default)
+    public override string GenerateScript(string? fromMigration = null, string? toMigration = null, MigrationsSqlGenerationOptions options = MigrationsSqlGenerationOptions.Default)
     {
         var shouldBeIdempotentScript = (
             options & MigrationsSqlGenerationOptions.Idempotent
@@ -107,6 +107,8 @@ public class TransactionWrappedMigrator : Migrator
                     GO
                     ".RemoveTheFirstIndentationLevel()
                 );
+
+            changedScript = changedScript.Remove(changedScript.Length - 1 - 3);
 
             return $@"
                 ---------------------------------------------------------------------------------------------------------------------------------

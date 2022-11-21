@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
@@ -57,7 +58,7 @@ public class AppDbContextConfigurator
 
         // Sql server
         builder.UseSqlServer(connectionString);
-        options.ReplaceService<IMigrator, TransactionWrappedMigrator>();
+        builder.ReplaceService<IMigrator, TransactionWrappedMigrator>();
     }
 
 }
