@@ -39,15 +39,19 @@ public class TransactionalUnitOfWorkManager : IUnitOfWorkManager // Scoped depen
     // Creates a new unit of work if there is none already created 
     public IUnitOfWork Begin()
     {
+        return BeginAsync().GetAwaiter().GetResult();
+    }
+    public async Task<IUnitOfWork> BeginAsync()
+    {
         // There is already an outter unit of work
         if (current != null && !current.IsUnusable())
         {
-            context.Database.UseTransaction(current.Transaction.GetDbTransaction());
+            await context.Database.UseTransactionAsync(current.Transaction.GetDbTransaction());
             return new NullUnitOfWork(); // When we call .Complete() on an inner UOW, the transaction should not be commited
         }
 
         // Create a new unit of work
-        var transaction = context.Database.CurrentTransaction ?? context.Database.BeginTransaction();
+        var transaction = context.Database.CurrentTransaction ?? await context.Database.BeginTransactionAsync();
         current = new TransactionalUnitOfWork(transaction);
 
         current.Disposed += (s, e) => current = null;
@@ -56,5 +60,4 @@ public class TransactionalUnitOfWorkManager : IUnitOfWorkManager // Scoped depen
 
         return current;
     }
-
 }

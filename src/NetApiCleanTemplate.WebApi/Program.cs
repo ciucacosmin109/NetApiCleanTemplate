@@ -53,6 +53,8 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+app.Logger.LogInformation("Configuring WebApi...");
+
 // Configure the HTTP request pipeline.
 if (builder.Environment.IsDevelopment())
 {

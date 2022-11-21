@@ -28,15 +28,15 @@ public class DemoService : IDemoService
 
     public async Task ChangeParent(ChangeParentForDemoDto dto)
     {
-        using var uow = uowManager.Begin();
+        using var uow = await uowManager.BeginAsync();
 
-        var demo = await demoRepo.Get(dto.Id);
+        var demo = await demoRepo.GetAsync(dto.Id);
         Guard.Against.NonExistentEntity(demo, dto.Id);
 
         demo!.DemoParentId = dto.DemoParentId;
-        await demoRepo.Update(demo);
+        await demoRepo.UpdateAsync(demo);
 
-        //throw new DomainException("If the change is not persisted, the UOW is working as expected");
+        throw new DomainException("If the change is not persisted, the UOW is working as expected");
 
         uow.Complete();
     }
@@ -49,18 +49,18 @@ public class DemoService : IDemoService
             DemoString = dto.DemoString ?? "",
             DemoParentId = dto.DemoParentId,
         };
-        var dbDemo = await demoRepo.Insert(demo);
+        var dbDemo = await demoRepo.InsertAsync(demo);
         return dbDemo.Id;
     }
 
     public async Task Delete(int id)
     {
-        await demoRepo.Delete(id);
+        await demoRepo.DeleteAsync(id);
     }
 
     public async Task<DemoDto> Get(int id)
     {
-        var demo = await demoRepo.Get(id);
+        var demo = await demoRepo.GetAsync(id);
         Guard.Against.NonExistentEntity(demo, id);
 
         return DemoDto.ToDto(demo!);
@@ -68,16 +68,16 @@ public class DemoService : IDemoService
 
     public async Task<ICollection<DemoDto>> GetAll()
     {
-        var demos = await demoRepo.GetAll();
+        var demos = await demoRepo.GetAllAsync();
         return DemoDto.ToDto(demos.ToList());
     }
 
     public async Task Update(UpdateDemoDto dto)
     {
-        var demo = await demoRepo.Get(dto.Id);
+        var demo = await demoRepo.GetAsync(dto.Id);
         Guard.Against.NonExistentEntity(demo, dto.Id);
 
         demo!.DemoString = dto.DemoString ?? "";
-        await demoRepo.Update(demo);
+        await demoRepo.UpdateAsync(demo);
     }
 }

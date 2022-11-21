@@ -24,10 +24,14 @@ public class TransactionalUnitOfWork : IUnitOfWork
 
     public void Complete()
     {
+        CompleteAsync().GetAwaiter().GetResult();
+    }
+    public async Task CompleteAsync()
+    {
         isUnusable = true;
         try
         {
-            transaction.Commit();
+            await transaction.CommitAsync();
             Completed?.Invoke(this, EventArgs.Empty);
         }
         catch (Exception ex)

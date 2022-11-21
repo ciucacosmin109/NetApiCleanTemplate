@@ -23,6 +23,11 @@ public class NullUnitOfWork : IUnitOfWork
         isUnusable = true;
         Completed?.Invoke(this, EventArgs.Empty);
     }
+    public async Task CompleteAsync()
+    {
+        await Task.FromResult(0);
+        Complete();
+    }
 
     public void Dispose()
     {

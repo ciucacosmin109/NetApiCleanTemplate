@@ -12,6 +12,7 @@ public interface IUnitOfWork : IDisposable
     event EventHandler<UnitOfWorkFailedEventArgs> Failed; 
 
     void Complete();
+    Task CompleteAsync();
 
     bool IsUnusable();
 }

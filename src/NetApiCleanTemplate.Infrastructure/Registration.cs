@@ -11,6 +11,8 @@ using NetApiCleanTemplate.Core.Entities.DemoEntity;
 using NetApiCleanTemplate.Infrastructure.Data;
 using NetApiCleanTemplate.Infrastructure.Data.Repositories;
 using NetApiCleanTemplate.Infrastructure.Identity;
+using NetApiCleanTemplate.Infrastructure.Logging;
+using NetApiCleanTemplate.Infrastructure.Services;
 using NetApiCleanTemplate.Infrastructure.Uow;
 using NetApiCleanTemplate.SharedKernel.Interfaces;
 using NetApiCleanTemplate.SharedKernel.Interfaces.Uow;
@@ -45,14 +47,21 @@ public static class Registration
         }
 
         // Generic repositories + Uow
-        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped(typeof(IReadRepository<>), typeof(EfReadRepository<>));
+        services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
         services.AddScoped<IUnitOfWorkManager, TransactionalUnitOfWorkManager>();
 
-        // Others
+        // Logging
+        services.AddScoped(typeof(IAppLogger<>), typeof(AppLogger<>));
+
+        // Email
+        services.AddScoped(typeof(IEmailSender), typeof(EmailSender));
+
+        // Caching
         services.AddMemoryCache();
 
         // Add DI resolution (auto)
-        var validSuffixes = new[] { "Repository", "Service", "Provider", "Queries" };
+        var validSuffixes = new[] { "Repository", "Service", "Queries" };
         var assembly = typeof(Registration).Assembly;
         services.RegisterAssemblyPublicNonGenericClasses(assembly)
             .Where(@class => validSuffixes.Any(suffix => @class.Name.EndsWith(suffix)))

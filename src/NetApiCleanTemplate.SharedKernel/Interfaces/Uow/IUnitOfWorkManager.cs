@@ -11,6 +11,7 @@ public interface IUnitOfWorkManager
     IUnitOfWork? Current { get; }
 
     IUnitOfWork Begin();
+    Task<IUnitOfWork> BeginAsync();
 
     // TODO
     //IUnitOfWork Begin(UnitOfWorkOptions options);
