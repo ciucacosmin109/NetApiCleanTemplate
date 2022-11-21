@@ -7,13 +7,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2F778F41-F70
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetApiCleanTemplate.WebApi", "src\NetApiCleanTemplate.WebApi\NetApiCleanTemplate.WebApi.csproj", "{B19D5A88-8A56-4A76-8C03-253407B1C39D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetApiCleanTemplate.SharedKernel", "src\NetApiCleanTemplate.SharedKernel\NetApiCleanTemplate.SharedKernel.csproj", "{41E652C5-FEAF-4FFC-9EAC-7C160EFF53F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetApiCleanTemplate.SharedKernel", "src\NetApiCleanTemplate.SharedKernel\NetApiCleanTemplate.SharedKernel.csproj", "{41E652C5-FEAF-4FFC-9EAC-7C160EFF53F7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetApiCleanTemplate.Core", "src\NetApiCleanTemplate.Core\NetApiCleanTemplate.Core.csproj", "{8FBA67B6-C352-4E82-8EF1-0638B2D216F6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetApiCleanTemplate.Infrastructure", "src\NetApiCleanTemplate.Infrastructure\NetApiCleanTemplate.Infrastructure.csproj", "{D838B854-C3CC-4523-AC0F-136D2199ADE2}"
 EndProject
-
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E1C26207-84DF-48A3-82FE-8EA6DD6D1796}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetApiCleanTemplate.UnitTests", "tests\NetApiCleanTemplate.UnitTests\NetApiCleanTemplate.UnitTests.csproj", "{99CE6834-6889-4FA1-8BF8-4E03522DA9DB}"
@@ -22,7 +21,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetApiCleanTemplate.Integra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetApiCleanTemplate.FunctionalTests", "tests\NetApiCleanTemplate.FunctionalTests\NetApiCleanTemplate.FunctionalTests.csproj", "{EAF32170-61DF-49CE-92FB-034790E44E33}"
 EndProject
-
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F81145DA-F11F-4108-A1F8-7B836245AB20}"
 	ProjectSection(SolutionItems) = preProject
 		.dockerignore = .dockerignore
@@ -31,7 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		readme.md = readme.md
 	EndProjectSection
 EndProject
-
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1FCBE191-34FE-4B2E-8915-CA81553958AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +41,10 @@ Global
 		{B19D5A88-8A56-4A76-8C03-253407B1C39D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B19D5A88-8A56-4A76-8C03-253407B1C39D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B19D5A88-8A56-4A76-8C03-253407B1C39D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41E652C5-FEAF-4FFC-9EAC-7C160EFF53F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41E652C5-FEAF-4FFC-9EAC-7C160EFF53F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41E652C5-FEAF-4FFC-9EAC-7C160EFF53F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41E652C5-FEAF-4FFC-9EAC-7C160EFF53F7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8FBA67B6-C352-4E82-8EF1-0638B2D216F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8FBA67B6-C352-4E82-8EF1-0638B2D216F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FBA67B6-C352-4E82-8EF1-0638B2D216F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -62,22 +65,22 @@ Global
 		{EAF32170-61DF-49CE-92FB-034790E44E33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAF32170-61DF-49CE-92FB-034790E44E33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAF32170-61DF-49CE-92FB-034790E44E33}.Release|Any CPU.Build.0 = Release|Any CPU
-		{41E652C5-FEAF-4FFC-9EAC-7C160EFF53F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{41E652C5-FEAF-4FFC-9EAC-7C160EFF53F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{41E652C5-FEAF-4FFC-9EAC-7C160EFF53F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{41E652C5-FEAF-4FFC-9EAC-7C160EFF53F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FCBE191-34FE-4B2E-8915-CA81553958AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FCBE191-34FE-4B2E-8915-CA81553958AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FCBE191-34FE-4B2E-8915-CA81553958AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FCBE191-34FE-4B2E-8915-CA81553958AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B19D5A88-8A56-4A76-8C03-253407B1C39D} = {2F778F41-F70E-4679-8EB2-4AFCB2E535F8}
+		{41E652C5-FEAF-4FFC-9EAC-7C160EFF53F7} = {2F778F41-F70E-4679-8EB2-4AFCB2E535F8}
 		{8FBA67B6-C352-4E82-8EF1-0638B2D216F6} = {2F778F41-F70E-4679-8EB2-4AFCB2E535F8}
 		{D838B854-C3CC-4523-AC0F-136D2199ADE2} = {2F778F41-F70E-4679-8EB2-4AFCB2E535F8}
 		{99CE6834-6889-4FA1-8BF8-4E03522DA9DB} = {E1C26207-84DF-48A3-82FE-8EA6DD6D1796}
 		{D5375960-1461-403F-B30F-E851CE136F36} = {E1C26207-84DF-48A3-82FE-8EA6DD6D1796}
 		{EAF32170-61DF-49CE-92FB-034790E44E33} = {E1C26207-84DF-48A3-82FE-8EA6DD6D1796}
-		{41E652C5-FEAF-4FFC-9EAC-7C160EFF53F7} = {2F778F41-F70E-4679-8EB2-4AFCB2E535F8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {56113C29-6AEA-42A4-A303-79973A2ED523}
