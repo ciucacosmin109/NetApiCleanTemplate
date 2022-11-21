@@ -36,6 +36,7 @@ public class ExceptionMiddleware
                 StatusCode = context.Response.StatusCode,
                 Message = domainException.Message
             }.ToString());
+            return;
         }
 
         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

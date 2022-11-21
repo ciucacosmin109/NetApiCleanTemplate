@@ -8,8 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using NetApiCleanTemplate.Infrastructure.Data;
 using NetApiCleanTemplate.SharedKernel.Interfaces.Uow;
+using NetCore.AutoRegisterDi;
 
 namespace NetApiCleanTemplate.Infrastructure.Uow;
+
+[RegisterAsScoped]
 public class TransactionalUnitOfWorkManager : IUnitOfWorkManager // Scoped dependency !!
 {
     private readonly AppDbContext context;

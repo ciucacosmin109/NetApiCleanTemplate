@@ -1,6 +1,4 @@
-﻿using NetApiCleanTemplate.Core;
-using NetApiCleanTemplate.Infrastructure;
-using NetApiCleanTemplate.WebApi.Middlewares;
+﻿using NetApiCleanTemplate.WebApi.Middlewares;
 using NetApiCleanTemplate.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using NetApiCleanTemplate.Infrastructure.Identity;
@@ -9,9 +7,10 @@ using Microsoft.AspNetCore.Identity;
 // Builder =============================================================================================
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure services for Infrastructure & WebApi
-NetApiCleanTemplate.Infrastructure.Dependencies.ConfigureServices(builder.Configuration, builder.Services);
-NetApiCleanTemplate.WebApi.Dependencies.ConfigureServices(builder.Configuration, builder.Services);
+// Configure services
+NetApiCleanTemplate.Core.Registration.ConfigureServices(builder.Configuration, builder.Services);
+NetApiCleanTemplate.Infrastructure.Registration.ConfigureServices(builder.Configuration, builder.Services);
+NetApiCleanTemplate.WebApi.Registration.ConfigureServices(builder.Configuration, builder.Services);
 
 // Configure kestrel
 builder.WebHost.ConfigureKestrel(serverOptions => {
@@ -61,7 +60,7 @@ if (builder.Environment.IsDevelopment())
     app.UseSwagger(); // Enable middleware to serve generated Swagger as a JSON endpoint.
     app.UseSwaggerUI(c => // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.)
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{NetApiCleanTemplate.WebApi.Dependencies.SwaggerName} v1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{NetApiCleanTemplate.WebApi.Registration.SwaggerName} v1");
     }); 
 
     // Others

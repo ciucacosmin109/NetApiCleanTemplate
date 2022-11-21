@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using NetApiCleanTemplate.Core.Entities.DemoEntity;
 using NetApiCleanTemplate.Core.Entities.DemoEntity.Guards;
-using NetApiCleanTemplate.Core.General.Guards;
 using NetApiCleanTemplate.Core.Services.DemoService.Input;
 using NetApiCleanTemplate.Core.Services.DemoService.Output;
+using NetApiCleanTemplate.SharedKernel.Exceptions;
 using NetApiCleanTemplate.SharedKernel.Guards;
 using NetApiCleanTemplate.SharedKernel.Interfaces;
 using NetApiCleanTemplate.SharedKernel.Interfaces.Uow;
@@ -36,7 +36,7 @@ public class DemoService : IDemoService
         demo!.DemoParentId = dto.DemoParentId;
         await demoRepo.Update(demo);
 
-        throw new Exception();
+        //throw new DomainException("If the change is not persisted, the UOW is working as expected");
 
         uow.Complete();
     }

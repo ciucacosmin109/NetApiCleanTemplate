@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NetApiCleanTemplate.Core.Entities.DemoEntity.Constants;
-using NetApiCleanTemplate.Core.Entities.DemoEntity.Exceptions;
-using NetApiCleanTemplate.Core.General.Exceptions;
 using NetApiCleanTemplate.SharedKernel.Entities;
+using NetApiCleanTemplate.SharedKernel.Exceptions;
 using NetApiCleanTemplate.SharedKernel.Guards;
 
-namespace NetApiCleanTemplate.Core.General.Guards;
+namespace NetApiCleanTemplate.SharedKernel.Guards;
 
 public static class GenericGuards
 {

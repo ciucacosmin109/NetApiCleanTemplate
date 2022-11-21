@@ -8,16 +8,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NetApiCleanTemplate.Core.Entities.DemoEntity;
-using NetApiCleanTemplate.Core.General.Interfaces;
 using NetApiCleanTemplate.Infrastructure.Data;
+using NetApiCleanTemplate.Infrastructure.Data.Repositories;
 using NetApiCleanTemplate.Infrastructure.Identity;
 using NetApiCleanTemplate.Infrastructure.Uow;
 using NetApiCleanTemplate.SharedKernel.Interfaces;
 using NetApiCleanTemplate.SharedKernel.Interfaces.Uow;
+using NetCore.AutoRegisterDi;
 
 namespace NetApiCleanTemplate.Infrastructure;
 
-public static class Dependencies
+public static class Registration
 {
     public static void ConfigureServices(IConfiguration configuration, IServiceCollection services)
     {
@@ -43,27 +44,19 @@ public static class Dependencies
             });
         }
 
-        // Others
-        services.AddMemoryCache();
+        // Generic repositories + Uow
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IUnitOfWorkManager, TransactionalUnitOfWorkManager>();
 
-        // TO DO: Replace with an automatic method
-        services.AddTransient<ITokenClaimsService, IdentityTokenClaimService>();
-        services.AddTransient<IRepository<DemoEntity, int>, Data.Repositories.Repository<DemoEntity, int>>();
+        // Others
+        services.AddMemoryCache();
 
-        // Add DI resolution (generic)
-        var validSuffixes = new[] { "Repository", "Queries", "Service" };
-        var assembly = typeof(Dependencies).Assembly;
+        // Add DI resolution (auto)
+        var validSuffixes = new[] { "Repository", "Service", "Provider", "Queries" };
+        var assembly = typeof(Registration).Assembly;
         services.RegisterAssemblyPublicNonGenericClasses(assembly)
             .Where(@class => validSuffixes.Any(suffix => @class.Name.EndsWith(suffix)))
             .AsPublicImplementedInterfaces(ServiceLifetime.Scoped);
-
-        // Domain
-        var assembly = typeof(Dependencies).Assembly;
-        var validSuffixes = new[] { "Service", "Factory", "Commands" };
-        services.RegisterAssemblyPublicNonGenericClasses(assembly)
-            .Where(@class => validSuffixes.Any(suffix => @class.Name.EndsWith(suffix)))
-            .AsPublicImplementedInterfaces();
 
     }
 

@@ -14,7 +14,8 @@ using NetApiCleanTemplate.SharedKernel.Entities.Interfaces;
 
 namespace NetApiCleanTemplate.Infrastructure.Data.Repositories;
 
-public class Repository<TDbContext, TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey>
+public class Repository<TDbContext, TEntity, TPrimaryKey> 
+    : IRepository<TEntity, TPrimaryKey>
     where TEntity : class, IBaseEntity<TPrimaryKey>
     where TDbContext : DbContext
 {
@@ -199,13 +200,15 @@ public class Repository<TDbContext, TEntity, TPrimaryKey> : IRepository<TEntity,
 
 }
 
-public class Repository<TEntity, TPrimaryKey> : Repository<AppDbContext, TEntity, TPrimaryKey>
+public class Repository<TEntity, TPrimaryKey> 
+    : Repository<AppDbContext, TEntity, TPrimaryKey>, IRepository<TEntity, TPrimaryKey>
     where TEntity : class, IBaseEntity<TPrimaryKey>
 {
     public Repository(AppDbContext context) : base(context) { }
 }
 
-public class Repository<TEntity> : Repository<TEntity, int>
+public class Repository<TEntity> 
+    : Repository<TEntity, int>, IRepository<TEntity>
     where TEntity : class, IBaseEntity<int>
 {
     public Repository(AppDbContext context) : base(context) { }

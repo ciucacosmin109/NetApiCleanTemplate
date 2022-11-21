@@ -10,7 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace NetApiCleanTemplate.WebApi;
 
-public static class Dependencies
+public static class Registration
 {
     public static string SwaggerName = "NetApiCleanTemplate API"; 
 

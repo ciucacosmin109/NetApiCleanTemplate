@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NetApiCleanTemplate.Core.Entities.DemoEntity.Guards;
-using NetApiCleanTemplate.Core.General.Guards;
+using NetApiCleanTemplate.Core.Entities.DemoEntity.Guards; 
 using NetApiCleanTemplate.Core.Services.DemoService;
 using NetApiCleanTemplate.Core.Services.DemoService.Input;
 using NetApiCleanTemplate.Core.Services.DemoService.Output;
@@ -65,19 +64,25 @@ public class DemoController : ControllerBase
         return await demoService.GetAll();
     }
 
-    [HttpGet("Create")]
+    [HttpPost("Create")]
     public async Task<int> Create(CreateDemoDto dto)
     {
         return await demoService.Create(dto);
     }
 
-    [HttpGet("Update")]
+    [HttpPut("Update")]
     public async Task Update(UpdateDemoDto dto)
     {
         await demoService.Update(dto);
     }
 
-    [HttpGet("Delete")]
+    [HttpPut("ChangeParent")]
+    public async Task ChangeParent(ChangeParentForDemoDto dto)
+    {
+        await demoService.ChangeParent(dto);
+    }
+
+    [HttpDelete("Delete")]
     public async Task Delete(int id)
     {
         await demoService.Delete(id);
