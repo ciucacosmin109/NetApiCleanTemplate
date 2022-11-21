@@ -50,6 +50,21 @@ public static class Dependencies
         // TO DO: Replace with an automatic method
         services.AddTransient<ITokenClaimsService, IdentityTokenClaimService>();
         services.AddTransient<IRepository<DemoEntity, int>, Data.Repositories.Repository<DemoEntity, int>>();
+
+        // Add DI resolution (generic)
+        var validSuffixes = new[] { "Repository", "Queries", "Service" };
+        var assembly = typeof(Dependencies).Assembly;
+        services.RegisterAssemblyPublicNonGenericClasses(assembly)
+            .Where(@class => validSuffixes.Any(suffix => @class.Name.EndsWith(suffix)))
+            .AsPublicImplementedInterfaces(ServiceLifetime.Scoped);
+
+        // Domain
+        var assembly = typeof(Dependencies).Assembly;
+        var validSuffixes = new[] { "Service", "Factory", "Commands" };
+        services.RegisterAssemblyPublicNonGenericClasses(assembly)
+            .Where(@class => validSuffixes.Any(suffix => @class.Name.EndsWith(suffix)))
+            .AsPublicImplementedInterfaces();
+
     }
 
     private static bool UseOnlyInMemoryDatabase(IConfiguration configuration)
