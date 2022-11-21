@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace NetApiCleanTemplate.Infrastructure.Data;
+
 public class AppDbContextConfigurator
 {
     public static void Configure(DbContextOptionsBuilder builder, IConfiguration appConfiguration)
@@ -55,7 +56,8 @@ public class AppDbContextConfigurator
         //builder.UseOracle(connectionString);\
 
         // Sql server
-        builder.UseSqlServer(connectionString);  
+        builder.UseSqlServer(connectionString);
+        options.ReplaceService<IMigrator, TransactionWrappedMigrator>();
     }
 
 }
