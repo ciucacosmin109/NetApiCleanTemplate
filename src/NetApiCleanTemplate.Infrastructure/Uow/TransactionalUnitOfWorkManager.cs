@@ -43,7 +43,7 @@ public class TransactionalUnitOfWorkManager : IUnitOfWorkManager // Scoped depen
         if (current != null && !current.IsUnusable())
         {
             context.Database.UseTransaction(current.Transaction.GetDbTransaction());
-            return current;
+            return new NullUnitOfWork(); // When we call .Complete() on an inner UOW, the transaction should not be commited
         }
 
         // Create a new unit of work
