@@ -14,7 +14,10 @@ public class NullUnitOfWork : IUnitOfWork
 
     public event EventHandler? Disposed;
     public event EventHandler? Completed;
+
+    #pragma warning disable CS0067 // The event is never used
     public event EventHandler<UnitOfWorkFailedEventArgs>? Failed;
+    #pragma warning restore CS0067
 
     public NullUnitOfWork() { }
 

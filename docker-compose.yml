@@ -1,15 +1,15 @@
 version: '3.4'
 services:
-  NetApiCleanTemplate_SqlServer:
+  sqlserver:
     image: mcr.microsoft.com/azure-sql-edge
     ports:
       - "1433:1433"
     environment:
       - SA_PASSWORD=Enter_Your_Password_Here_1234
       - ACCEPT_EULA=Y
-  NetApiCleanTemplate_API:
+  webapi:
     build:
       context: .
       dockerfile: src/NetApiCleanTemplate.WebApi/Dockerfile
     depends_on:
-      - "NetApiCleanTemplate_SqlServer"
+      - "sqlserver"

@@ -36,7 +36,7 @@ public class DemoService : IDemoService
         demo!.DemoParentId = dto.DemoParentId;
         await demoRepo.UpdateAsync(demo);
 
-        throw new DomainException("If the change is not persisted, the UOW is working as expected");
+        //throw new DomainException("If the change is not persisted, the UOW is working as expected");
 
         uow.Complete();
     }
