@@ -17,8 +17,10 @@ public static class AppConfigurations
         _configurationCache = new ConcurrentDictionary<string, IConfigurationRoot>();
     }
 
-    public static IConfigurationRoot Get(string path, string? environmentName = null, bool addUserSecrets = false)
+    public static IConfigurationRoot Get(string? path = null, string? environmentName = null, bool addUserSecrets = false)
     {
+        path ??= CalculateContentRootFolder();
+
         var cacheKey = path + "#" + environmentName + "#" + addUserSecrets;
         return _configurationCache.GetOrAdd(
             cacheKey,
@@ -45,5 +47,38 @@ public static class AppConfigurations
         }
 
         return builder.Build();
+    }
+
+    public static string CalculateContentRootFolder()
+    {
+        var assemblyDirectoryPath = Path.GetDirectoryName(typeof(AppConfigurations).Assembly.Location);
+        if (assemblyDirectoryPath == null)
+        {
+            throw new Exception("Could not find the location of the current assembly!");
+        }
+
+        var directoryInfo = new DirectoryInfo(assemblyDirectoryPath);
+        while (!DirectoryContains(directoryInfo.FullName, "NetApiCleanTemplate.sln"))
+        {
+            if (directoryInfo.Parent == null)
+            {
+                throw new Exception("Could not find the content root folder!");
+            }
+
+            directoryInfo = directoryInfo.Parent;
+        }
+
+        var webApiFolder = Path.Combine(directoryInfo.FullName, "src", "NetApiCleanTemplate.WebApi");
+        if (Directory.Exists(webApiFolder))
+        {
+            return webApiFolder;
+        }
+
+        throw new Exception("Could not find the root folder of the web api project!");
+    }
+
+    private static bool DirectoryContains(string directory, string fileName)
+    {
+        return Directory.GetFiles(directory).Any(filePath => string.Equals(Path.GetFileName(filePath), fileName));
     }
 }
