@@ -10,6 +10,7 @@ public class AppDbContextSeed
 {
     public static async Task SeedAsync(AppDbContext dbContext)
     {
+        // TODO: Take the multitenancy into account
         await Task.FromResult(0);
     }
 }

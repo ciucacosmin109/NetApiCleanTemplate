@@ -10,10 +10,25 @@ namespace NetApiCleanTemplate.Infrastructure.Identity.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AppTenants",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenantId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DatabaseConnectionString = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppTenants", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -27,7 +42,9 @@ namespace NetApiCleanTemplate.Infrastructure.Identity.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HasAccessToAllTenants = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -49,12 +66,31 @@ namespace NetApiCleanTemplate.Infrastructure.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DemoEntity",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DemoString = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    DemoParentId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DemoEntity", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DemoEntity_DemoEntity_DemoParentId",
+                        column: x => x.DemoParentId,
+                        principalTable: "DemoEntity",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -70,12 +106,38 @@ namespace NetApiCleanTemplate.Infrastructure.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AppUserTenants",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppUserTenants", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppUserTenants_AppTenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "AppTenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppUserTenants_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -97,7 +159,7 @@ namespace NetApiCleanTemplate.Infrastructure.Identity.Migrations
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -114,8 +176,8 @@ namespace NetApiCleanTemplate.Infrastructure.Identity.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -138,7 +200,7 @@ namespace NetApiCleanTemplate.Infrastructure.Identity.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -153,6 +215,22 @@ namespace NetApiCleanTemplate.Infrastructure.Identity.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppTenants_TenantId",
+                table: "AppTenants",
+                column: "TenantId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppUserTenants_TenantId",
+                table: "AppUserTenants",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppUserTenants_UserId",
+                table: "AppUserTenants",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -192,10 +270,18 @@ namespace NetApiCleanTemplate.Infrastructure.Identity.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DemoEntity_DemoParentId",
+                table: "DemoEntity",
+                column: "DemoParentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AppUserTenants");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -212,6 +298,12 @@ namespace NetApiCleanTemplate.Infrastructure.Identity.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "DemoEntity");
+
+            migrationBuilder.DropTable(
+                name: "AppTenants");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -219,4 +311,3 @@ namespace NetApiCleanTemplate.Infrastructure.Identity.Migrations
         }
     }
 }
-

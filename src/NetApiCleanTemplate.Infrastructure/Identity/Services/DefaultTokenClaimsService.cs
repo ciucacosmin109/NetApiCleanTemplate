@@ -4,18 +4,19 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity; 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using NetApiCleanTemplate.Core.Constants;
-using NetApiCleanTemplate.SharedKernel.Interfaces;
+using NetApiCleanTemplate.Infrastructure.Identity.Entities;
+using NetApiCleanTemplate.SharedKernel.Interfaces.Identity;
 
-namespace NetApiCleanTemplate.Infrastructure.Identity;
+namespace NetApiCleanTemplate.Infrastructure.Identity.Services;
 
-public class IdentityTokenClaimService : ITokenClaimsService
+public class DefaultTokenClaimsService : ITokenClaimsService
 {
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<AppUser> _userManager;
 
-    public IdentityTokenClaimService(UserManager<IdentityUser> userManager)
+    public DefaultTokenClaimsService(UserManager<AppUser> userManager)
     {
         _userManager = userManager;
     }

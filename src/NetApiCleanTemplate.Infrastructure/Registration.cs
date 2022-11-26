@@ -11,11 +11,13 @@ using NetApiCleanTemplate.Core.Entities.DemoEntity;
 using NetApiCleanTemplate.Infrastructure.Data;
 using NetApiCleanTemplate.Infrastructure.Data.Repositories;
 using NetApiCleanTemplate.Infrastructure.Identity;
+using NetApiCleanTemplate.Infrastructure.Identity.Services;
 using NetApiCleanTemplate.Infrastructure.Logging;
 using NetApiCleanTemplate.Infrastructure.Multitenancy;
 using NetApiCleanTemplate.Infrastructure.Services;
 using NetApiCleanTemplate.Infrastructure.Uow;
 using NetApiCleanTemplate.SharedKernel.Interfaces;
+using NetApiCleanTemplate.SharedKernel.Interfaces.Identity;
 using NetApiCleanTemplate.SharedKernel.Interfaces.Multitenancy;
 using NetApiCleanTemplate.SharedKernel.Interfaces.Uow;
 using NetCore.AutoRegisterDi;
@@ -51,16 +53,19 @@ public static class Registration
             });
         }
 
+        // Authentication (with multitenancy)
+        services.AddTransient<MultitenancyUserManager, MultitenancyUserManager>();
+        services.AddTransient<ITokenClaimsService, MultitenancyTokenClaimsService>();
+        services.AddTransient<ITokenClaimsTenantsService, MultitenancyTokenClaimsService>();
+
         // Generic repositories + Uow
         services.AddScoped<IUnitOfWorkManager, TransactionalUnitOfWorkManager>();
         services.AddTransient(typeof(IReadRepository<>), typeof(EfReadRepository<>));
         services.AddTransient(typeof(IRepository<>), typeof(EfRepository<>));
 
-        // Logging
+        // Logging, Email, etc ...
         services.AddTransient(typeof(IAppLogger<>), typeof(AppLogger<>));
-
-        // Email
-        services.AddTransient(typeof(IEmailSender), typeof(EmailSender));
+        services.AddTransient<IEmailSender, EmailSender>();
 
         // Caching
         services.AddMemoryCache();
@@ -70,6 +75,7 @@ public static class Registration
         var assembly = typeof(Registration).Assembly;
         services.RegisterAssemblyPublicNonGenericClasses(assembly)
             .Where(@class => validSuffixes.Any(suffix => @class.Name.EndsWith(suffix)))
+            //.IgnoreThisInterface<ITokenClaimsService>()
             .AsPublicImplementedInterfaces(ServiceLifetime.Transient);
 
     }

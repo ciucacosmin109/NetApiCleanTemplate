@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using NetApiCleanTemplate.SharedKernel.Interfaces.Multitenancy;
 using NetApiCleanTemplate.WebApi.Models;
 
 namespace NetApiCleanTemplate.WebApi.Controllers.Identity.Models;
@@ -14,5 +16,8 @@ public class RegistrationRequest : BaseRequest
 
     [Required(ErrorMessage = "Password is required")]
     public string? Password { get; set; }
+
+    [DefaultValue(new[] { Tenant.DefaultTenantId })]
+    public string[] TenantIds { get; set; } = new[] { Tenant.DefaultTenantId };
 }
 

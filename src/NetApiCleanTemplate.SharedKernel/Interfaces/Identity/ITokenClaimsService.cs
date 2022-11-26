@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetApiCleanTemplate.SharedKernel.Interfaces;
+namespace NetApiCleanTemplate.SharedKernel.Interfaces.Identity;
 
 public interface ITokenClaimsService
 {

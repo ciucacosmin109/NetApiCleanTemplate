@@ -3,6 +3,7 @@ using NetApiCleanTemplate.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using NetApiCleanTemplate.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
+using NetApiCleanTemplate.Infrastructure.Identity.Entities;
 
 // Builder =============================================================================================
 var builder = WebApplication.CreateBuilder(args);
@@ -39,8 +40,8 @@ using (var scope = app.Services.CreateScope())
 
         // Migrate identity db 
         var identityContext = scopedProvider.GetRequiredService<AppIdentityDbContext>();
-        var identityUserMan = scopedProvider.GetRequiredService<UserManager<IdentityUser>>();
-        var identityRoleMan = scopedProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var identityUserMan = scopedProvider.GetRequiredService<UserManager<AppUser>>();
+        var identityRoleMan = scopedProvider.GetRequiredService<RoleManager<AppRole>>();
         if (identityContext.Database.IsSqlServer())
         {
             identityContext.Database.Migrate();
@@ -55,7 +56,7 @@ using (var scope = app.Services.CreateScope())
 
 app.Logger.LogInformation("Configuring WebApi...");
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline when running in development
 if (builder.Environment.IsDevelopment())
 {
     // Use swagger
@@ -69,12 +70,14 @@ if (builder.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-app.UseMiddleware<ExceptionMiddleware>();
-
+// Configure the HTTP request pipeline
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<MultitenancyMiddleware>();
 
 app.MapControllers();
 

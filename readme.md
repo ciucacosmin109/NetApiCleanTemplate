@@ -17,11 +17,12 @@ https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/intro?view=aspnetcore-6
 - `dotnet tool install --global dotnet-ef`
 
 ## Add the first migration
-- `dotnet ef migrations add InitialMigration --context AppDbContext --output-dir Data/Migrations --project ../SpaCleanTemplate.Infrastructure`
-- `dotnet ef migrations add InitialMigration --context AppIdentityDbContext --output-dir Identity/Migrations --project ../SpaCleanTemplate.Infrastructure`
+- `dotnet ef migrations add InitialMigration --context AppDbContext --output-dir Data/Migrations --project ../NetApiCleanTemplate.Infrastructure`
+- `dotnet ef migrations add InitialMigration --context AppIdentityDbContext --output-dir Identity/Migrations --project ../NetApiCleanTemplate.Infrastructure`
 
 ## Add migration
-- `dotnet ef migrations add InitialMigration --context AppDbContext`
+- `dotnet ef migrations add InitialMigration --context AppDbContext --project ../NetApiCleanTemplate.Infrastructure`
+- `dotnet ef migrations add AddedTenants --context AppIdentityDbContext --project ../NetApiCleanTemplate.Infrastructure`
 
 ## Update database
 - `dotnet ef database update --context AppDbContext`

@@ -7,6 +7,7 @@ using NetApiCleanTemplate.Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using NetApiCleanTemplate.Infrastructure.Identity.Entities;
 
 namespace NetApiCleanTemplate.WebApi;
 
@@ -29,7 +30,7 @@ public static class Registration
     private static void AddCustomAuthentication(this IServiceCollection services)
     {
         // 1
-        services.AddIdentity<IdentityUser, IdentityRole>()
+        services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddDefaultTokenProviders();
 

@@ -8,7 +8,7 @@ namespace NetApiCleanTemplate.SharedKernel.Interfaces.Multitenancy;
 
 public class Tenant
 {
-    public static string DefaultTenantId = String.Empty;
+    public const string DefaultTenantId = "";
 
     public string TenantId { get; set; }
     public string DatabaseConnectionString { get; set; }

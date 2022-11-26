@@ -7,11 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Identity\Config\**" />
     <Compile Remove="Identity\Managers\**" />
-    <EmbeddedResource Remove="Identity\Config\**" />
     <EmbeddedResource Remove="Identity\Managers\**" />
-    <None Remove="Identity\Config\**" />
     <None Remove="Identity\Managers\**" />
   </ItemGroup>
 
