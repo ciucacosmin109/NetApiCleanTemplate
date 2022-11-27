@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using NetApiCleanTemplate.Infrastructure.Identity.Entities;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Reflection;
+using Microsoft.Extensions.Options;
 
 // Builder =============================================================================================
 var builder = WebApplication.CreateBuilder(args);
@@ -67,6 +68,11 @@ if (builder.Environment.IsDevelopment())
     {
         // Core
         c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{NetApiCleanTemplate.WebApi.Registration.SwaggerName} v1");
+
+        // Portal
+        c.OAuthClientId(NetApiCleanTemplate.WebApi.Registration.SwaggerClientId);
+        c.OAuthAppName(NetApiCleanTemplate.WebApi.Registration.SwaggerName);
+        c.OAuthUsePkce();
 
         // Display
         c.DefaultModelExpandDepth(0);

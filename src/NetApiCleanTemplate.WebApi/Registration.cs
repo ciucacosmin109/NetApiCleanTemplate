@@ -8,11 +8,16 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using NetApiCleanTemplate.Infrastructure.Identity.Entities;
+using Microsoft.Extensions.Options;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace NetApiCleanTemplate.WebApi;
 
 public static class Registration
 {
+    public static string AppApiScopeId = "NetApiCleanTemplate_Api";
+
+    public static string SwaggerClientId = "NetApiCleanTemplate_Swagger"; 
     public static string SwaggerName = "NetApiCleanTemplate API"; 
 
     public static void ConfigureServices(IConfiguration configuration, IServiceCollection services)
@@ -21,7 +26,8 @@ public static class Registration
         services.AddControllers();
 
         // Add auth
-        services.AddCustomAuthentication();
+        //services.AddCustomAuthentication();
+        services.AddPortalAuthentication();
         
         // Add swagger
         services.AddCustomSwagger();
@@ -36,8 +42,7 @@ public static class Registration
 
         // 2
         var key = Encoding.ASCII.GetBytes(AuthorizationConstants.JWT_SECRET_KEY);
-        services.AddAuthentication(config =>
-        {
+        services.AddAuthentication(config => {
             config.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -47,10 +52,48 @@ public static class Registration
             config.SaveToken = true;
             config.TokenValidationParameters = new TokenValidationParameters {
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key), 
+                IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = false,
                 ValidateAudience = false
             };
+        });
+    }
+
+    private static void AddPortalAuthentication(this IServiceCollection services)
+    {
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+        // 1
+        services.AddIdentity<AppUser, AppRole>()
+                .AddEntityFrameworkStores<AppIdentityDbContext>()
+                .AddDefaultTokenProviders();
+
+        // 2
+        services.AddAuthentication(config => {
+            config.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            config.DefaultChallengeScheme = "oidc";
+        })
+        .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config => {
+            config.Authority = "https://localhost:5001";
+
+            //config.Audience = Configuration["auth:oidc:clientid"];
+            config.TokenValidationParameters = new TokenValidationParameters {
+                ValidateAudience = false,
+                ValidateIssuerSigningKey = true,
+                ClockSkew = TimeSpan.Zero
+            };
+        });
+
+        // 3
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("ApiScope", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.RequireClaim("scope", AppApiScopeId);
+            });
         });
     }
 
@@ -62,6 +105,7 @@ public static class Registration
             c.SwaggerDoc("v1", new OpenApiInfo { Title = SwaggerName, Version = "v1" });
             c.EnableAnnotations(); // https://medium.com/c-sharp-progarmming/configure-annotations-in-swagger-documentation-for-asp-net-core-api-8215596907c7
             c.SchemaFilter<CustomSchemaFilters>();
+            c.OperationFilter<AuthorizeCheckOperationFilter>();
             
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
                 Description = @"JWT Authorization header using the Bearer scheme. <br />
@@ -91,7 +135,21 @@ public static class Registration
                 }
             });
 
+            c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme {
+                Type = SecuritySchemeType.OAuth2,
+                Flows = new OpenApiOAuthFlows {
+                    AuthorizationCode = new OpenApiOAuthFlow {
+                        AuthorizationUrl = new Uri("https://localhost:5001/connect/authorize"),
+                        TokenUrl = new Uri("https://localhost:5001/connect/token"),
+                        Scopes = new Dictionary<string, string>
+                        {
+                            {AppApiScopeId, SwaggerName}
+                        }
+                    }
+                }
+            });
         });
     }
+
 }
 
