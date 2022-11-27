@@ -62,16 +62,16 @@ public static class Registration
             c.SwaggerDoc("v1", new OpenApiInfo { Title = SwaggerName, Version = "v1" });
             c.EnableAnnotations(); // https://medium.com/c-sharp-progarmming/configure-annotations-in-swagger-documentation-for-asp-net-core-api-8215596907c7
             c.SchemaFilter<CustomSchemaFilters>();
+            
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
-                Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
-                      Enter 'Bearer' [space] and then your token in the text input below.
-                      \r\n\r\nExample: 'Bearer 12345abcdef'",
+                Description = @"JWT Authorization header using the Bearer scheme. <br />
+                    Enter 'Bearer' [space] and then your token in the text input below. <br />
+                    Example: 'Bearer 12345abcdef'. <br />",
                 Name = "Authorization",
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey,
                 Scheme = "Bearer"
             });
-
             c.AddSecurityRequirement(new OpenApiSecurityRequirement()
             {
                 {
@@ -90,6 +90,7 @@ public static class Registration
                     new List<string>()
                 }
             });
+
         });
     }
 }

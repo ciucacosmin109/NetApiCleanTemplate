@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using NetApiCleanTemplate.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using NetApiCleanTemplate.Infrastructure.Identity.Entities;
+using Swashbuckle.AspNetCore.SwaggerUI;
+using System.Reflection;
 
 // Builder =============================================================================================
 var builder = WebApplication.CreateBuilder(args);
@@ -63,7 +65,23 @@ if (builder.Environment.IsDevelopment())
     app.UseSwagger(); // Enable middleware to serve generated Swagger as a JSON endpoint.
     app.UseSwaggerUI(c => // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.)
     {
+        // Core
         c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{NetApiCleanTemplate.WebApi.Registration.SwaggerName} v1");
+
+        // Display
+        c.DefaultModelExpandDepth(0);
+        c.DefaultModelRendering(ModelRendering.Model);
+        c.DefaultModelsExpandDepth(-1);
+        c.DocExpansion(DocExpansion.List);
+
+        c.DisplayOperationId();
+        c.DisplayRequestDuration();
+        c.EnableFilter();
+        c.ShowExtensions();
+
+        // Other
+        c.DocumentTitle = "NetApiCleanTemplate";
+        //c.InjectJavascript("/swagger/multitenancy-auth.js");
     }); 
 
     // Others
@@ -72,6 +90,7 @@ if (builder.Environment.IsDevelopment())
 
 // Configure the HTTP request pipeline
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();

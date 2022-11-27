@@ -29,5 +29,9 @@
     <ProjectReference Include="..\NetApiCleanTemplate.Infrastructure\NetApiCleanTemplate.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>
 
