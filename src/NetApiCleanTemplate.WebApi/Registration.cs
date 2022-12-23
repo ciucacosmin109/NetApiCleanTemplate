@@ -10,12 +10,20 @@ using Microsoft.IdentityModel.Tokens;
 using NetApiCleanTemplate.Infrastructure.Identity.Entities;
 using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
+using NetApiCleanTemplate.WebApi.Conventions;
 
 namespace NetApiCleanTemplate.WebApi;
 
 public static class Registration
 {
     public static string AppApiScopeId = "NetApiCleanTemplate_Api";
+    public static string AppApiScopeName = "Api";
+    public static string AppApiScopePolicy = "ApiScope";
+
+    public static string AdminApiScopeId = "NetApiCleanTemplate_AdminApi";
+    public static string AdminApiScopeName = "Admin";
+    public static string AdminApiScopePolicy = "AdminScope";
 
     public static string SwaggerClientId = "NetApiCleanTemplate_Swagger"; 
     public static string SwaggerName = "NetApiCleanTemplate API"; 
@@ -23,7 +31,9 @@ public static class Registration
     public static void ConfigureServices(IConfiguration configuration, IServiceCollection services)
     {
         // Add services to the container.
-        services.AddControllers();
+        services.AddControllers(options => {
+            options.Conventions.Add(new AddAuthorizeFiltersControllerConvention());
+        });
 
         // Add auth
         //services.AddCustomAuthentication();
@@ -57,6 +67,29 @@ public static class Registration
                 ValidateAudience = false
             };
         });
+
+        // 3
+        services.AddAuthorization(options => {
+            // Authenticated
+            options.AddPolicy("default", policy => {
+                policy.RequireAuthenticatedUser();
+            });
+            // ApiScope
+            options.AddPolicy(AppApiScopePolicy, policy => {
+                policy.RequireAuthenticatedUser();
+                // TODO
+                //policy.RequireClaim("scope", AppApiScopeId);
+            });
+            // AdminScope
+            options.AddPolicy(AdminApiScopePolicy, policy => {
+                policy.RequireAuthenticatedUser();
+                // TODO
+                //policy.RequireClaim("scope", AdminApiScopeId);
+            });
+
+            // Configure the default policy
+            options.DefaultPolicy = options.GetPolicy("default") ?? throw new ArgumentNullException("options.DefaultPolicy");
+        });
     }
 
     private static void AddPortalAuthentication(this IServiceCollection services)
@@ -71,12 +104,13 @@ public static class Registration
         // 2
         services.AddAuthentication(config => {
             config.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-
+                    
             config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            config.DefaultChallengeScheme = "oidc";
+            config.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
+            config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
         .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config => {
-            config.Authority = "https://localhost:5001";
+            config.Authority = "https://localhost:44390";
 
             //config.Audience = Configuration["auth:oidc:clientid"];
             config.TokenValidationParameters = new TokenValidationParameters {
@@ -87,13 +121,25 @@ public static class Registration
         });
 
         // 3
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy("ApiScope", policy =>
-            {
+        services.AddAuthorization(options => {
+            // Authenticated
+            options.AddPolicy("default", policy => {
+                policy.RequireAuthenticatedUser();
+            });
+            // ApiScope
+            options.AddPolicy(AppApiScopePolicy, policy => {
                 policy.RequireAuthenticatedUser();
                 policy.RequireClaim("scope", AppApiScopeId);
             });
+            // AdminScope
+            options.AddPolicy(AdminApiScopePolicy, policy => 
+            {
+                policy.RequireAuthenticatedUser();
+                policy.RequireClaim("scope", AdminApiScopeId);
+            });
+
+            // Configure the default policy
+            options.DefaultPolicy = options.GetPolicy("default") ?? throw new ArgumentNullException("options.DefaultPolicy");
         });
     }
 
@@ -139,11 +185,12 @@ public static class Registration
                 Type = SecuritySchemeType.OAuth2,
                 Flows = new OpenApiOAuthFlows {
                     AuthorizationCode = new OpenApiOAuthFlow {
-                        AuthorizationUrl = new Uri("https://localhost:5001/connect/authorize"),
-                        TokenUrl = new Uri("https://localhost:5001/connect/token"),
+                        AuthorizationUrl = new Uri("https://localhost:44390/connect/authorize"),
+                        TokenUrl = new Uri("https://localhost:44390/connect/token"),
                         Scopes = new Dictionary<string, string>
                         {
-                            {AppApiScopeId, SwaggerName}
+                            {AppApiScopeId, AppApiScopeName},
+                            {AdminApiScopeId, AdminApiScopeName}
                         }
                     }
                 }

@@ -6,6 +6,7 @@ using NetApiCleanTemplate.Core.Services.DemoService.Input;
 using NetApiCleanTemplate.Core.Services.DemoService.Output;
 using NetApiCleanTemplate.SharedKernel.Exceptions;
 using NetApiCleanTemplate.SharedKernel.Guards;
+using NetApiCleanTemplate.WebApi.Conventions;
 
 namespace NetApiCleanTemplate.Web.Controllers.Demo;
 
@@ -50,11 +51,27 @@ public class DemoController : ControllerBase
         return demoString;
     }
 
-    [HttpGet("TestAuthentication")]
+    [HttpGet("TestAuthorization")]
     [Authorize]
-    public string TestAuthentication()
+    public string TestAuthorization()
     {
-        logger.LogInformation("TestAuthentication");
+        logger.LogInformation("TestAuthorization");
+        return "You have access here :)";
+    }
+
+    [HttpGet("TestApiAuthorization")]
+    [AuthorizeApi]
+    public string TestApiAuthorization()
+    {
+        logger.LogInformation("TestApiAuthorization");
+        return "You have access here :)";
+    }
+
+    [HttpGet("TestAdminAuthorization")]
+    [AuthorizeAdmin]
+    public string TestAdminAuthorization()
+    {
+        logger.LogInformation("TestAdminAuthorization from DemoController");
         return "You have access here :)";
     }
 

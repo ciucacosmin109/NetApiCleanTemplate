@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Collections;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
+using NetApiCleanTemplate.WebApi.Conventions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace NetApiCleanTemplate.WebApi.Swagger;
@@ -8,10 +10,11 @@ public class AuthorizeCheckOperationFilter : IOperationFilter
 {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        var hasAuthorize =
-          context.MethodInfo.DeclaringType == null
-          || context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any()
-          || context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any();
+        var hasAuthorize = context.MethodInfo.DeclaringType != null && ( false
+            || AddAuthorizeFiltersControllerConvention.NeedsAuthorization(context.MethodInfo.DeclaringType.FullName ?? "") // AddAuthorizeFiltersControllerConvention adds filters to the controller ... filters are not attributes :(
+            || context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any()
+            || context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any()
+        );
 
         if (hasAuthorize)
         {
@@ -30,7 +33,7 @@ public class AuthorizeCheckOperationFilter : IOperationFilter
                                 Id = "oauth2"
                             }
                         }
-                    ] = new[] { Registration.AppApiScopeId }
+                    ] = new[] { Registration.AppApiScopeId, Registration.AdminApiScopeId }
                 }
             };
 
