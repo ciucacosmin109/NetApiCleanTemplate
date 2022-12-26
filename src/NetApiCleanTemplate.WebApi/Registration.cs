@@ -18,12 +18,15 @@ namespace NetApiCleanTemplate.WebApi;
 public static class Registration
 {
     public static string AppApiScopeId = "NetApiCleanTemplate_Api";
-    public static string AppApiScopeName = "Api";
+    public static string AppApiScopeName = "API";
     public static string AppApiScopePolicy = "ApiScope";
 
     public static string AdminApiScopeId = "NetApiCleanTemplate_AdminApi";
-    public static string AdminApiScopeName = "Admin";
+    public static string AdminApiScopeName = "Admin API";
     public static string AdminApiScopePolicy = "AdminScope";
+
+    public static string MultitenancyScopeId = "multitenancy";
+    public static string MultitenancyScopeName = "Multitenancy Scope";
 
     public static string SwaggerClientId = "NetApiCleanTemplate_Swagger"; 
     public static string SwaggerName = "NetApiCleanTemplate API"; 
@@ -190,7 +193,8 @@ public static class Registration
                         Scopes = new Dictionary<string, string>
                         {
                             {AppApiScopeId, AppApiScopeName},
-                            {AdminApiScopeId, AdminApiScopeName}
+                            {AdminApiScopeId, AdminApiScopeName},
+                            {MultitenancyScopeId, MultitenancyScopeName}, 
                         }
                     }
                 }
