@@ -1,8 +1,6 @@
 @ECHO off
-cls
 
 ECHO Deleting all BIN and OBJ folders...
-ECHO.
 
 FOR /d /r . %%d in (bin,obj) DO (
 	IF EXIST "%%d" (		 	 
@@ -15,6 +13,5 @@ FOR /d /r . %%d in (bin,obj) DO (
 	)
 )
 
+ECHO BIN and OBJ folders have been successfully deleted.
 ECHO.
-ECHO.BIN and OBJ folders have been successfully deleted. Press any key to exit.
-pause > nul

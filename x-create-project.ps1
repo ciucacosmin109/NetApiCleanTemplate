@@ -1,6 +1,6 @@
 ﻿# Company name
 $oldCompanyName="YourCompanyName"
-$newCompanyName="Cmc"
+$newCompanyName="CMC"
 
 # Project name
 $oldProjectName="NetApiCleanTemplate" 
@@ -22,23 +22,24 @@ function Rename {
 
 	$elapsed = [System.Diagnostics.Stopwatch]::StartNew()
 
-	Write-Host '----------------------------------------------------------------------------------'
 	Write-Host "[$TargetFolder] Renaming folders ..."
-	Write-Host '----------------------------------------------------------------------------------'
 	# Rename folders
 	Ls $TargetFolder -Recurse | Where { $_.GetType().Name -eq $dirType -and ($_.Name.Contains($PlaceHolderCompanyName) -or $_.Name.Contains($PlaceHolderProjectName)) } | ForEach-Object{
 		Write-Host '-(dir. name) ' $_.FullName
 		$newDirectoryName=$_.Name.Replace($PlaceHolderCompanyName,$NewCompanyName).Replace($PlaceHolderProjectName,$NewProjectName)
 		Rename-Item $_.FullName $newDirectoryName
 	} 
-	Write-Host '----------------------------------------------------------------------------------'
 	Write-Host '' 
 
-	# Replace file contents and rename file 
-	Write-Host '----------------------------------------------------------------------------------'
+	# Replace file contents and rename file
 	Write-Host "[$TargetFolder] Renaming file contents and file names ..."
-	Write-Host '----------------------------------------------------------------------------------'
 	Ls $TargetFolder -Include $include -Recurse | Where { $_.GetType().Name -eq $fileType} | ForEach-Object{
+		
+		if($_.Name.contains('docker')) {
+			Write-Host '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+			Write-Host $_.Name
+			Write-Host '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+		}
 		$fileText = Get-Content $_ -Raw -Encoding UTF8
 		if($fileText.Length -gt 0 -and ($fileText.contains($PlaceHolderCompanyName) -or $fileText.contains($PlaceHolderProjectName))){
 			$fileText.Replace($PlaceHolderCompanyName,$NewCompanyName).Replace($PlaceHolderProjectName,$NewProjectName) | Set-Content $_ -Encoding UTF8
@@ -49,15 +50,11 @@ function Rename {
 			Rename-Item $_.FullName $newFileName
 			Write-Host '-(name) ' $_.FullName
 		}
-	} 
-	Write-Host '----------------------------------------------------------------------------------'
-	Write-Host ''
+	}
 
 	$elapsed.stop()
-	Write-Host '----------------------------------------------------------------------------------'
-	write-host "[$TargetFolder] Total time: $($elapsed.Elapsed.ToString())"
-	Write-Host '----------------------------------------------------------------------------------'
 	Write-Host ''
+	write-host "[$TargetFolder] Total time: $($elapsed.Elapsed.ToString())"
 }
 
 Write-Host ''
@@ -68,7 +65,6 @@ $newRoot = $newCompanyName + "." + $newProjectName
 Write-Host '----------------------------------------------------------------------------------'
 Write-Host " Copying files to $newRoot ..."
 Write-Host '----------------------------------------------------------------------------------'
-Write-Host ''
 
 $source = ".\*"
 $destination = "..\\" + $newRoot
@@ -77,7 +73,24 @@ Remove-Item -Recurse $destination
 mkdir $destination
 Copy-Item -Path (Get-Item -Path $source -Exclude ('.git', '.vs', 'x-create-project.ps1')).FullName -Destination $destination -Recurse -Force
 
+Write-Host ''
+
+# Clean
+Write-Host '----------------------------------------------------------------------------------'
+Write-Host " Cleaning the project ..."
+Write-Host '----------------------------------------------------------------------------------'
+Write-Host ''
+
+Push-Location $destination
+.\x-clean-project.bat
+Pop-Location
+
 # Rename
+Write-Host '----------------------------------------------------------------------------------'
+Write-Host " Renaming the project content ..."
+Write-Host '----------------------------------------------------------------------------------'
+Write-Host ''
+
 $targetFolder = (Get-Item -Path "..\$newRoot\" -Verbose).FullName
 Rename -TargetFolder $targetFolder -PlaceHolderCompanyName $oldCompanyName -PlaceHolderProjectName $oldProjectName -NewCompanyName $newCompanyName -NewProjectName $newProjectName
 
