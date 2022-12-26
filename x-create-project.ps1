@@ -20,8 +20,6 @@ function Rename {
 	$dirType="DirectoryInfo"  
 	$include=@("*.cs","*.cshtml","*.asax","*.ps1","*.ts","*.csproj","*.sln","*.xaml","*.json","*.js","*.xml","*.config","Dockerfile")
 
-	$elapsed = [System.Diagnostics.Stopwatch]::StartNew()
-
 	Write-Host "[$TargetFolder] Renaming folders ..."
 	# Rename folders
 	Ls $TargetFolder -Recurse | Where { $_.GetType().Name -eq $dirType -and ($_.Name.Contains($PlaceHolderCompanyName) -or $_.Name.Contains($PlaceHolderProjectName)) } | ForEach-Object{
@@ -52,11 +50,10 @@ function Rename {
 		}
 	}
 
-	$elapsed.stop()
-	Write-Host ''
-	write-host "[$TargetFolder] Total time: $($elapsed.Elapsed.ToString())"
 }
 
+# Start
+$elapsed = [System.Diagnostics.Stopwatch]::StartNew()
 Write-Host ''
 
 # Copy
@@ -69,7 +66,9 @@ Write-Host '--------------------------------------------------------------------
 $source = ".\*"
 $destination = "..\\" + $newRoot
 
-Remove-Item -Recurse $destination
+if (Test-Path -Path $destination) {
+	Remove-Item -Recurse $destination
+}
 mkdir $destination
 Copy-Item -Path (Get-Item -Path $source -Exclude ('.git', '.vs', 'x-create-project.ps1')).FullName -Destination $destination -Recurse -Force
 
@@ -94,5 +93,10 @@ Write-Host ''
 $targetFolder = (Get-Item -Path "..\$newRoot\" -Verbose).FullName
 Rename -TargetFolder $targetFolder -PlaceHolderCompanyName $oldCompanyName -PlaceHolderProjectName $oldProjectName -NewCompanyName $newCompanyName -NewProjectName $newProjectName
 
-
+# Summary
+$elapsed.stop()
+Write-Host ''
+Write-Host '----------------------------------------------------------------------------------'
+Write-Host "[$TargetFolder] Total time: $($elapsed.Elapsed.ToString())"
+Write-Host '----------------------------------------------------------------------------------'
 
