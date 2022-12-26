@@ -18,7 +18,7 @@ function Rename {
 	# Config
 	$fileType="FileInfo"  
 	$dirType="DirectoryInfo"  
-	$include=@("*.cs","*.cshtml","*.asax","*.ps1","*.ts","*.csproj","*.sln","*.xaml","*.json","*.js","*.xml","*.config","Dockerfile")
+	$include=@("*.cs","*.cshtml","*.asax","*.sql","*.ps1","*.ts","*.csproj","*.sln","*.xaml","*.json","*.js","*.xml","*.config","Dockerfile","*.dcproj","*.yml","*.yaml","*.md")
 
 	Write-Host "[$TargetFolder] Renaming folders ..."
 	# Rename folders
@@ -32,12 +32,6 @@ function Rename {
 	# Replace file contents and rename file
 	Write-Host "[$TargetFolder] Renaming file contents and file names ..."
 	Ls $TargetFolder -Include $include -Recurse | Where { $_.GetType().Name -eq $fileType} | ForEach-Object{
-		
-		if($_.Name.contains('docker')) {
-			Write-Host '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-			Write-Host $_.Name
-			Write-Host '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-		}
 		$fileText = Get-Content $_ -Raw -Encoding UTF8
 		if($fileText.Length -gt 0 -and ($fileText.contains($PlaceHolderCompanyName) -or $fileText.contains($PlaceHolderProjectName))){
 			$fileText.Replace($PlaceHolderCompanyName,$NewCompanyName).Replace($PlaceHolderProjectName,$NewProjectName) | Set-Content $_ -Encoding UTF8
@@ -49,7 +43,6 @@ function Rename {
 			Write-Host '-(name) ' $_.FullName
 		}
 	}
-
 }
 
 # Start

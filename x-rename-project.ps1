@@ -17,7 +17,7 @@ function Rename {
 	# Config
 	$fileType="FileInfo"  
 	$dirType="DirectoryInfo"  
-	$include=@("*.cs","*.cshtml","*.asax","*.ps1","*.ts","*.csproj","*.sln","*.xaml","*.json","*.js","*.xml","*.config","Dockerfile")
+	$include=@("*.cs","*.cshtml","*.asax","*.sql","*.ps1","*.ts","*.csproj","*.sln","*.xaml","*.json","*.js","*.xml","*.config","Dockerfile","*.dcproj","*.yml","*.yaml","*.md")
 
 	$elapsed = [System.Diagnostics.Stopwatch]::StartNew()
 
