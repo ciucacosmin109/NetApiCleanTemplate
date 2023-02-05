@@ -98,6 +98,13 @@ if (builder.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseCors(builder => builder
+    .AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    //.AllowCredentials()
+);
+
 app.UseAuthentication();
 app.UseAuthorization();
 
