@@ -45,11 +45,12 @@ public class MultitenancyTokenClaimsService : ITokenClaimsService, ITokenClaimsT
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
-        var tenants = await _userManager.GetTenantsAsync(user);
+        // Supported tenants
+        /*var tenants = await _userManager.GetTenantsAsync(user);
         foreach (var tenant in tenants)
         {
-            claims.Add(new Claim(CustomClaimTypes.Tenant, tenant));
-        }
+            claims.Add(new Claim(CustomClaimTypes.SupportedTenant, tenant));
+        }*/
 
         var tokenDescriptor = new SecurityTokenDescriptor {
             Subject = new ClaimsIdentity(claims.ToArray()),

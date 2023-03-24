@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace NetApiCleanTemplate.SharedKernel.Interfaces.Identity;
 public class CustomClaimTypes
 {
-    public const string Tenant = "cmc/ws/2022/11/identity/claims/tenant";
-    public const string SelectedTenant = "cmc/ws/2022/11/identity/claims/selectedtenant";
+    public const string SelectedTenant = "tenant";
+    public const string Right = "right";
 }

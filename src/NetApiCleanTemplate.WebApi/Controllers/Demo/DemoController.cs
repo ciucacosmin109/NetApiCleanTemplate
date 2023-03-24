@@ -75,6 +75,22 @@ public class DemoController : ControllerBase
         return "You have access here :)";
     }
 
+    [HttpGet("TestRoleAuthorization")]
+    [Authorize(Roles = "rol1")]
+    public string TestRoleAuthorization()
+    {
+        logger.LogInformation("TestRoleAuthorization from DemoController");
+        return "You have access here :)";
+    }
+
+    [HttpGet("TestRightAuthorization")]
+    [AuthorizeRight("api-home")]
+    public string TestRightAuthorization()
+    {
+        logger.LogInformation("TestRightAuthorization from DemoController");
+        return "You have access here :)";
+    }
+
     [HttpGet("GetAll")]
     public async Task<IEnumerable<DemoDto>> GetAll()
     {
