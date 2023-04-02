@@ -36,7 +36,7 @@ public static class Registration
         {
             // Use an in-memory database
             services.AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase("NetApiCleanTemplate.Database"));
-            services.AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase("NetApiCleanTemplate.Identity"));
+            //services.AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase("NetApiCleanTemplate.Identity"));
         }
         else
         {
@@ -48,15 +48,15 @@ public static class Registration
             services.AddDbContext<AppDbContext>(options => {
                 AppDbContextConfigurator.Configure(options, configuration);
             });
-            services.AddDbContext<AppIdentityDbContext>(options => {
-                AppIdentityDbContextConfigurator.Configure(options, configuration);
-            });
+            //services.AddDbContext<AppIdentityDbContext>(options => {
+            //    AppIdentityDbContextConfigurator.Configure(options, configuration);
+            //});
         }
 
-        // Authentication (with multitenancy)
-        services.AddTransient<MultitenancyUserManager, MultitenancyUserManager>();
-        services.AddTransient<ITokenClaimsService, MultitenancyTokenClaimsService>();
-        services.AddTransient<ITokenClaimsTenantsService, MultitenancyTokenClaimsService>();
+        // Authentication (with multitenancy) (no SSO)
+        //services.AddTransient<MultitenancyUserManager, MultitenancyUserManager>();
+        //services.AddTransient<ITokenClaimsService, MultitenancyTokenClaimsService>();
+        //services.AddTransient<ITokenClaimsTenantsService, MultitenancyTokenClaimsService>();
 
         // Generic repositories + Uow
         services.AddScoped<IUnitOfWorkManager, TransactionalUnitOfWorkManager>();
@@ -75,7 +75,13 @@ public static class Registration
         var assembly = typeof(Registration).Assembly;
         services.RegisterAssemblyPublicNonGenericClasses(assembly)
             .Where(@class => validSuffixes.Any(suffix => @class.Name.EndsWith(suffix)))
-            //.IgnoreThisInterface<ITokenClaimsService>()
+
+            // Remove auth without SSO
+            //.IgnoreThisInterface<MultitenancyUserManager>()
+            .IgnoreThisInterface<ITokenClaimsService>()
+            .IgnoreThisInterface<ITokenClaimsTenantsService>()
+
+            // Add all as transient
             .AsPublicImplementedInterfaces(ServiceLifetime.Transient);
 
     }

@@ -56,8 +56,17 @@ public class AppDbContext : DbContext
                 throw new NoDatabaseForTenantException(tenant.TenantId);
             }
 
-            // Replace the configuration from AppDbContextConfigurator
-            optionsBuilder.UseSqlServer(tenant.DatabaseConnectionString);
+            // TODO: Replace the configuration from AppDbContextConfigurator
+            //if (
+            //    tenant.DatabaseConnectionString.EndsWith(".db;") ||
+            //    tenant.DatabaseConnectionString.EndsWith(".db"))
+            //{
+                optionsBuilder.UseSqlite(tenant.DatabaseConnectionString);
+            //}
+            //else
+            //{
+            //    optionsBuilder.UseSqlServer(tenant.DatabaseConnectionString);
+            //}
         }
     }
 }

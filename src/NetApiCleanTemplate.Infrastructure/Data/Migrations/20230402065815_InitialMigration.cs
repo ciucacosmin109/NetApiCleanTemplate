@@ -12,10 +12,10 @@ namespace NetApiCleanTemplate.Infrastructure.Data.Migrations
                 name: "DemoEntities",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DemoString = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    DemoParentId = table.Column<int>(type: "int", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DemoString = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    DemoParentId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -40,4 +40,3 @@ namespace NetApiCleanTemplate.Infrastructure.Data.Migrations
         }
     }
 }
-

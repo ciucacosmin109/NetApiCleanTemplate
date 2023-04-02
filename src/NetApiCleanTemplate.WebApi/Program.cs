@@ -110,6 +110,7 @@ app.UseAuthorization();
 
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<MultitenancyMiddleware>();
+app.UseMiddleware<DatabaseUpdaterMiddleware>();
 
 app.MapControllers();
 

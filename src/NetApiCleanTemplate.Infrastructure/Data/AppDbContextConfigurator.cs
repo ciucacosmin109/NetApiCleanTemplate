@@ -57,7 +57,7 @@ public class AppDbContextConfigurator
         //builder.UseOracle(connectionString);\
 
         // Sql server
-        builder.UseSqlServer(connectionString);
+        builder.UseSqlite(connectionString);
         builder.ReplaceService<IMigrator, TransactionWrappedMigrator>();
     }
 

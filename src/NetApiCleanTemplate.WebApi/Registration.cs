@@ -25,7 +25,7 @@ public static class Registration
     public static string AdminApiScopeName = "Admin API";
     public static string AdminApiScopePolicy = "AdminScope";
 
-    public static string MultitenancyScopeId = "multitenancy";
+    public static string MultitenancyScopeId = "tenant";
     public static string MultitenancyScopeName = "Multitenancy Scope";
 
     public static string SwaggerClientId = "NetApiCleanTemplate_Swagger"; 
@@ -39,14 +39,14 @@ public static class Registration
         });
 
         // Add auth
-        //services.AddCustomAuthentication();
-        services.AddPortalAuthentication();
+        //services.AddCustomAuthentication(configuration);
+        services.AddPortalAuthentication(configuration);
         
         // Add swagger
-        services.AddCustomSwagger();
+        services.AddCustomSwagger(configuration);
     }
 
-    private static void AddCustomAuthentication(this IServiceCollection services)
+    private static void AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         // 1
         services.AddIdentity<AppUser, AppRole>()
@@ -95,14 +95,14 @@ public static class Registration
         });
     }
 
-    private static void AddPortalAuthentication(this IServiceCollection services)
+    private static void AddPortalAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
         // 1
-        services.AddIdentity<AppUser, AppRole>()
-                .AddEntityFrameworkStores<AppIdentityDbContext>()
-                .AddDefaultTokenProviders();
+        //services.AddIdentity<AppUser, AppRole>()
+        //        .AddEntityFrameworkStores<AppIdentityDbContext>()
+        //        .AddDefaultTokenProviders();
 
         // 2
         services.AddAuthentication(config => {
@@ -113,7 +113,7 @@ public static class Registration
             config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
         .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config => {
-            config.Authority = "https://localhost:44390";
+            config.Authority = configuration["SSO:Address"];
 
             //config.Audience = Configuration["auth:oidc:clientid"];
             config.TokenValidationParameters = new TokenValidationParameters {
@@ -146,7 +146,7 @@ public static class Registration
         });
     }
 
-    private static void AddCustomSwagger(this IServiceCollection services)
+    private static void AddCustomSwagger(this IServiceCollection services, IConfiguration configuration)
     {
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
@@ -184,12 +184,13 @@ public static class Registration
                 }
             });
 
+            var ssoAddr = configuration["SSO:Address"];
             c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme {
                 Type = SecuritySchemeType.OAuth2,
                 Flows = new OpenApiOAuthFlows {
                     AuthorizationCode = new OpenApiOAuthFlow {
-                        AuthorizationUrl = new Uri("https://localhost:44390/connect/authorize"),
-                        TokenUrl = new Uri("https://localhost:44390/connect/token"),
+                        AuthorizationUrl = new Uri($"{ssoAddr}/connect/authorize"),
+                        TokenUrl = new Uri($"{ssoAddr}/connect/token"),
                         Scopes = new Dictionary<string, string>
                         {
                             {AppApiScopeId, AppApiScopeName},

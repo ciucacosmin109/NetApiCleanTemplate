@@ -92,30 +92,35 @@ public class DemoController : ControllerBase
     }
 
     [HttpGet("GetAll")]
+    [AuthorizeApi]
     public async Task<IEnumerable<DemoDto>> GetAll()
     {
         return await demoService.GetAll();
     }
 
     [HttpPost("Create")]
+    [AuthorizeApi]
     public async Task<int> Create(CreateDemoDto dto)
     {
         return await demoService.Create(dto);
     }
 
     [HttpPut("Update")]
+    [AuthorizeApi]
     public async Task Update(UpdateDemoDto dto)
     {
         await demoService.Update(dto);
     }
 
     [HttpPut("ChangeParent")]
+    [AuthorizeApi]
     public async Task ChangeParent(ChangeParentForDemoDto dto)
     {
         await demoService.ChangeParent(dto);
     }
 
     [HttpDelete("Delete")]
+    [AuthorizeApi]
     public async Task Delete(int id)
     {
         await demoService.Delete(id);
