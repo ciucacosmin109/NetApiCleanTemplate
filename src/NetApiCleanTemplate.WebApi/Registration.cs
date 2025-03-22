@@ -44,6 +44,24 @@ public static class Registration
         
         // Add swagger
         services.AddCustomSwagger(configuration);
+
+        // Add cors
+        services.AddCors(options => {
+            options.AddPolicy("FrontendPolicy", policy =>
+            {
+                policy.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+            options.AddPolicy("SignalrPolicy", policy => 
+            {
+                var cors = configuration.GetSection("AllowedHostsForSignalR").Get<string[]>() ?? [];
+                policy.WithOrigins(cors)
+                    .AllowAnyHeader()
+                    .WithMethods("GET", "POST")
+                    .AllowCredentials();
+            });
+        });
     }
 
     private static void AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)

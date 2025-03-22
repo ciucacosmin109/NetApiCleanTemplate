@@ -7,9 +7,15 @@ using NetApiCleanTemplate.Infrastructure.Identity.Entities;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Reflection;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.HttpOverrides;
+using NetApiCleanTemplate.WebApi.Swagger;
+using NetApiCleanTemplate.WebApi.Logging;
 
 // Builder =============================================================================================
 var builder = WebApplication.CreateBuilder(args);
+
+// Serilog
+builder.Host.SetupSerilog();
 
 // Configure services
 NetApiCleanTemplate.Core.Registration.ConfigureServices(builder.Configuration, builder.Services);
@@ -59,62 +65,49 @@ using (var scope = app.Services.CreateScope())
 
 app.Logger.LogInformation("Configuring WebApi...");
 
-// Configure the HTTP request pipeline when running in development
-if (builder.Environment.IsDevelopment())
+// Configure the HTTP request pipeline ================================================================
+if (!builder.Environment.IsDevelopment())
 {
-    // Use swagger
-    app.UseSwagger(); // Enable middleware to serve generated Swagger as a JSON endpoint.
-    app.UseSwaggerUI(c => // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.)
-    {
-        // Core
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{NetApiCleanTemplate.WebApi.Registration.SwaggerName} v1");
-
-        // Portal
-        c.OAuthClientId(NetApiCleanTemplate.WebApi.Registration.SwaggerClientId);
-        c.OAuthAppName(NetApiCleanTemplate.WebApi.Registration.SwaggerName);
-        c.OAuthUsePkce();
-
-        // Display
-        c.DefaultModelExpandDepth(0);
-        c.DefaultModelRendering(ModelRendering.Model);
-        c.DefaultModelsExpandDepth(-1);
-        c.DocExpansion(DocExpansion.List);
-
-        c.DisplayOperationId();
-        c.DisplayRequestDuration();
-        c.EnableFilter();
-        c.ShowExtensions();
-
-        // Other
-        c.DocumentTitle = "NetApiCleanTemplate";
-        //c.InjectJavascript("/swagger/multitenancy-auth.js");
-    }); 
-
-    // Others
-    app.UseDeveloperExceptionPage();
+    app.UseHstsMiddleware(app.Configuration);
 }
 
-// Configure the HTTP request pipeline
-app.UseHttpsRedirection();
+// Nginx headers
+app.UseForwardedHeaders(new() { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
+// app.UseHttpsRedirection(); // It is handled by NGINX
+
+// Swagger
+app.UseSwaggerMiddleware(app.Configuration);
+
+// Routing
+app.UseRouting();
+app.UseCors("FrontendPolicy");
+
+// Files
 app.UseStaticFiles();
 
-app.UseCors(builder => builder
-    .AllowAnyOrigin()
-    .AllowAnyHeader()
-    .AllowAnyMethod()
-    //.AllowCredentials()
-);
-
+// Auth
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Catch exceptions related to multitenancy and database setup
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseRequestLoggingMiddleware();
+
+// Multitenancy + Database
 app.UseMiddleware<MultitenancyMiddleware>();
 app.UseMiddleware<DatabaseUpdaterMiddleware>();
 
+// Language
+var options = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+app.UseRequestLocalization(options!.Value);
+app.UseLanguageMiddleware();
+
+// Controllers
 app.MapControllers();
 
 // Run =================================================================================================
 app.Logger.LogInformation("Starting WebApi..."); 
 app.Run();
 
+// Integration tests: alternative to the InternalsVisibleTo
+public sealed partial class Program { }

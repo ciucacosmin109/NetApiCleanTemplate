@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace NetApiCleanTemplate.SharedKernel.Interfaces.Identity;
 public class CustomClaimTypes
 {
+    public const string UserName = "name";
     public const string SelectedTenant = "tenant";
     public const string Right = "right";
 }
