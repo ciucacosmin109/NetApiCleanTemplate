@@ -87,12 +87,9 @@ public static class Registration
     }
 
     private static bool UseOnlyInMemoryDatabase(IConfiguration configuration)
-    { 
-        if (configuration["UseOnlyInMemoryDatabase"] != null)
-        {
-            return bool.Parse(configuration["UseOnlyInMemoryDatabase"]);
-        }
-        return false;
+    {
+        var enable = configuration.GetValue<bool?>("Database:UseOnlyInMemoryDatabase") ?? false;
+        return enable;
     }
 
 }

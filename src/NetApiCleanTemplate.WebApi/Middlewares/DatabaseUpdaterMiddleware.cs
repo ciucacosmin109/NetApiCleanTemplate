@@ -21,7 +21,8 @@ public class DatabaseUpdaterMiddleware
         IConfiguration configuration,
         IDatabaseUpdateService updateService
     ) {
-        if (Boolean.Parse(configuration["AutoUpdateDatabase"] ?? "False") == true) {
+        var enable = configuration.GetValue<bool?>("Database:AutoUpdateDatabase") ?? false;
+        if (enable) {
             await updateService.Update();
         }
 

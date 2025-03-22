@@ -10,7 +10,7 @@ public static class SwaggerMiddleware
 
     public static void UseSwaggerMiddleware(this IApplicationBuilder app, IConfiguration config)
     {
-        var enable = config.GetValue<bool>("Swagger:Enable");
+        var enable = config.GetValue<bool?>("Swagger:Enabled") ?? false;
         if (!enable)
         {
             return;
@@ -26,7 +26,7 @@ public static class SwaggerMiddleware
         });
         app.UseSwaggerUI(c => {
             // Core
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{NetApiCleanTemplate.WebApi.Registration.SwaggerName} v1");
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{Registration.SwaggerName} v1");
 
             // Portal
             c.OAuthClientId(Registration.SwaggerClientId);

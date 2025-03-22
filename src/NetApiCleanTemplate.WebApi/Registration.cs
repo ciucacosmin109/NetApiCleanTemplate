@@ -12,6 +12,10 @@ using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
 using NetApiCleanTemplate.WebApi.Conventions;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
+using NetApiCleanTemplate.WebApi.Configuration;
+using NetApiCleanTemplate.SharedKernel.Interfaces.Identity;
 
 namespace NetApiCleanTemplate.WebApi;
 
@@ -49,19 +53,50 @@ public static class Registration
         services.AddCors(options => {
             options.AddPolicy("FrontendPolicy", policy =>
             {
-                policy.AllowAnyOrigin()
+                var cors = configuration.GetValue<string>("AllowedOrigins") ?? "*";
+                var corsList = cors.Split(";");
+                policy.WithOrigins(corsList)
                     .AllowAnyHeader()
                     .AllowAnyMethod();
             });
             options.AddPolicy("SignalrPolicy", policy => 
             {
-                var cors = configuration.GetSection("AllowedHostsForSignalR").Get<string[]>() ?? [];
-                policy.WithOrigins(cors)
+                var cors = configuration.GetValue<string>("AllowedOrigins") ?? "*";
+                var corsList = cors.Split(";");
+                policy.WithOrigins(corsList)
                     .AllowAnyHeader()
                     .WithMethods("GET", "POST")
                     .AllowCredentials();
             });
         });
+
+        // Add rate limiter
+        var rlOptions = new AppSettingsRateLimiterOptions();
+        configuration.GetSection("RequestRateLimiter").Bind(rlOptions);
+
+        if (rlOptions.Enabled)
+        {
+            services.AddRateLimiter(options => 
+            {
+                options.AddPolicy("RateLimiterPolicy", context =>
+                {
+                    var userId = "global";
+                    if (rlOptions.LimitByUser) {
+                        var tenant = context.User?.FindFirst(CustomClaimTypes.SelectedTenant)?.Value ?? "default";
+                        var user = context.User?.FindFirst(CustomClaimTypes.UserName)?.Value ?? "anonymous";
+                        userId = $"{tenant}/{user}";
+                    }
+
+                    return RateLimitPartition.GetSlidingWindowLimiter(userId, _ => new SlidingWindowRateLimiterOptions {
+                        PermitLimit = rlOptions.PermitLimit,
+                        Window = TimeSpan.FromSeconds(rlOptions.Window),
+                        SegmentsPerWindow = rlOptions.SegmentsPerWindow,
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = rlOptions.QueueLimit
+                    });
+                });
+            });
+        }
     }
 
     private static void AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)

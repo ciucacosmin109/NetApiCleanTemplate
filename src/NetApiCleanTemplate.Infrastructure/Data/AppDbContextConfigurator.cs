@@ -15,7 +15,8 @@ public class AppDbContextConfigurator
 {
     public static void Configure(DbContextOptionsBuilder builder, IConfiguration appConfiguration)
     {
-        var connectionString = appConfiguration.GetConnectionString("DefaultConnection");
+        var sec = appConfiguration.GetSection("Database:ConnectionStrings");
+        var connectionString = sec.GetValue<string?>("DefaultConnection") ?? "";
         Configure(builder, connectionString);
     }
 

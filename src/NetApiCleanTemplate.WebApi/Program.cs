@@ -66,30 +66,28 @@ using (var scope = app.Services.CreateScope())
 app.Logger.LogInformation("Configuring WebApi...");
 
 // Configure the HTTP request pipeline ================================================================
-if (!builder.Environment.IsDevelopment())
-{
-    app.UseHstsMiddleware(app.Configuration);
-}
 
 // Nginx headers
 app.UseForwardedHeaders(new() { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
 // app.UseHttpsRedirection(); // It is handled by NGINX
 
-// Swagger
-app.UseSwaggerMiddleware(app.Configuration);
-
-// Routing
+// Routing + Rate limiter + Security
 app.UseRouting();
-app.UseCors("FrontendPolicy");
+app.UseRateLimiter();
+app.UseHstsMiddleware(app.Configuration);
 
-// Files
+// Swagger + Static files
+app.UseSwaggerMiddleware(app.Configuration);
 app.UseStaticFiles();
+
+// Cors
+app.UseCors();
 
 // Auth
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Catch exceptions related to multitenancy and database setup
+// Catch exceptions + Logging
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseRequestLoggingMiddleware();
 
@@ -103,7 +101,10 @@ app.UseRequestLocalization(options!.Value);
 app.UseLanguageMiddleware();
 
 // Controllers
-app.MapControllers();
+app.MapControllers()
+    .RequireCors("FrontendPolicy")
+    .RequireRateLimiting("RateLimiterPolicy");
+app.Map("/", context => Task.Run(() => context.Response.Redirect("/swagger/index.html")));
 
 // Run =================================================================================================
 app.Logger.LogInformation("Starting WebApi..."); 

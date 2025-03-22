@@ -24,6 +24,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.14" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>

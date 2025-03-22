@@ -45,8 +45,7 @@ public class AppDbContext : DbContext
         base.OnConfiguring(optionsBuilder);
 
         // Multitenancy
-        var multitenancyEnabledString = configuration.GetSection("Multitenancy")["Enabled"];
-        var multitenancyEnabled = Boolean.Parse(multitenancyEnabledString ?? "False");
+        var multitenancyEnabled = configuration.GetValue<bool?>("Multitenancy:Enabled") ?? false;
         if (multitenancyEnabled)
         {
             // Get the connection string
