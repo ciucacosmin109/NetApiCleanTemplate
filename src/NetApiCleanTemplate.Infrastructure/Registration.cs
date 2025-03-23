@@ -88,7 +88,7 @@ public static class Registration
 
     private static bool UseOnlyInMemoryDatabase(IConfiguration configuration)
     {
-        var enable = configuration.GetValue<bool?>("Database:UseOnlyInMemoryDatabase") ?? false;
+        var enable = configuration.GetValue<bool?>("Database:UseInMemoryDatabase") ?? false;
         return enable;
     }
 

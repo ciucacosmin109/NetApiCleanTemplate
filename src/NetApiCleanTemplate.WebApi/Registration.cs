@@ -87,13 +87,48 @@ public static class Registration
                         userId = $"{tenant}/{user}";
                     }
 
-                    return RateLimitPartition.GetSlidingWindowLimiter(userId, _ => new SlidingWindowRateLimiterOptions {
-                        PermitLimit = rlOptions.PermitLimit,
-                        Window = TimeSpan.FromSeconds(rlOptions.Window),
-                        SegmentsPerWindow = rlOptions.SegmentsPerWindow,
-                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-                        QueueLimit = rlOptions.QueueLimit
-                    });
+                    if (rlOptions.Type == "sliding-window")
+                    {
+                        return RateLimitPartition.GetSlidingWindowLimiter(userId, _ => new SlidingWindowRateLimiterOptions {
+                            PermitLimit = rlOptions.PermitLimit,
+                            Window = TimeSpan.FromSeconds(rlOptions.Window),
+                            SegmentsPerWindow = rlOptions.SegmentsPerWindow, // sliding
+                            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                            QueueLimit = rlOptions.QueueLimit
+                        });
+                    }
+                    else if (rlOptions.Type == "fixed-window")
+                    {
+                        return RateLimitPartition.GetFixedWindowLimiter(userId, _ => new FixedWindowRateLimiterOptions {
+                            PermitLimit = rlOptions.PermitLimit,
+                            Window = TimeSpan.FromSeconds(rlOptions.Window),
+                            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                            QueueLimit = rlOptions.QueueLimit
+                        });
+                    }
+                    else if (rlOptions.Type == "token-bucket")
+                    {
+                        return RateLimitPartition.GetTokenBucketLimiter(userId, _ => new TokenBucketRateLimiterOptions {
+                            TokenLimit = rlOptions.TokenLimit,
+                            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                            QueueLimit = rlOptions.QueueLimit,
+                            ReplenishmentPeriod = TimeSpan.FromSeconds(rlOptions.ReplenishmentPeriod),
+                            TokensPerPeriod = rlOptions.TokensPerPeriod,
+                            AutoReplenishment = rlOptions.AutoReplenishment
+                        });
+                    }
+                    else if (rlOptions.Type == "concurrency")
+                    {
+                        return RateLimitPartition.GetConcurrencyLimiter(userId, _ => new ConcurrencyLimiterOptions {
+                            PermitLimit = rlOptions.PermitLimit,
+                            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                            QueueLimit = rlOptions.QueueLimit
+                        });
+                    }
+                    else
+                    {
+                        throw new Exception($"The specified rate limiter is not implemented ({rlOptions.Type})");
+                    }
                 });
             });
         }
